@@ -1,5 +1,7 @@
 package com.parkinghelper.parker.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.parkinghelper.parker.domain.Views;
 import com.parkinghelper.parker.repositories.ParkingPlaceRepository;
 import com.parkinghelper.parker.domain.ParkingPlace;
 import org.springframework.beans.BeanUtils;
@@ -22,11 +24,13 @@ public class ParkingController {
     }
 
     @GetMapping
+    @JsonView(Views.ListPlaces.class)
     public Iterable<ParkingPlace> get(){
         return repository.findAll();
     }
 
     @GetMapping("{id}")
+    @JsonView(Views.FullPlace.class)
     public ParkingPlace get(@PathVariable("id") ParkingPlace place){
         return place;
     }

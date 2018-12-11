@@ -1,5 +1,6 @@
 package com.parkinghelper.parker.domain;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import org.springframework.data.geo.Point;
 
@@ -12,24 +13,18 @@ public class ParkingPlace {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonView(Views.ListPlaces.class)
     private Long id;
+    @JsonView(Views.ListPlaces.class)
     private Point coordinate;
+    @JsonView(Views.ListPlaces.class)
     private Boolean isFree;
 
     @ManyToOne
+    @JsonView(Views.FullPlace.class)
     private ParkingArea area;
 
 
     public ParkingPlace() {
-    }
-    public ParkingPlace(Point coordinate, Boolean isFree) {
-        this.coordinate = coordinate;
-        this.isFree = isFree;
-    }
-
-    public ParkingPlace(Point coordinate, Boolean isFree, ParkingArea area) {
-        this.coordinate = coordinate;
-        this.isFree = isFree;
-        this.area = area;
     }
 }
