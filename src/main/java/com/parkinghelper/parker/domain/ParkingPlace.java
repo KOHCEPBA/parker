@@ -26,4 +26,10 @@ public class ParkingPlace {
         this.coordinate = coordinate;
         this.isFree = isFree;
     }
+
+    public ParkingPlace(Point coordinate, Boolean isFree, ParkingArea area) {
+        this.coordinate = coordinate;
+        this.isFree = isFree;
+        this.area = area;
+    }
 }

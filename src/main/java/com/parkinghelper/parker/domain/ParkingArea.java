@@ -4,7 +4,6 @@ package com.parkinghelper.parker.domain;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Table
