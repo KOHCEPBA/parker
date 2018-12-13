@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table
+@Table(name = "parking_area")
 @Data
 public class ParkingArea {
 
@@ -17,12 +17,11 @@ public class ParkingArea {
     String name;
     Integer freeSpaceCount;
 
-    @Transient
-    @OneToMany(mappedBy = "area",
-            cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY
-    )
-    Set<ParkingPlace> Places;
+//    @OneToMany(mappedBy = "area",
+//            cascade = CascadeType.ALL
+////            fetch = FetchType.LAZY
+//    )
+//    Set<ParkingPlace> Places;
 
 
     public ParkingArea() {

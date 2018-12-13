@@ -7,22 +7,23 @@ import org.springframework.data.geo.Point;
 import javax.persistence.*;
 
 @Entity
-@Table
+@Table(name = "parking_place")
 @Data
 public class ParkingPlace {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonView(Views.ListPlaces.class)
+//    @JsonView(Views.ListPlaces.class)
     private Long id;
 
-    @JsonView(Views.ListPlaces.class)
+//    @JsonView(Views.ListPlaces.class)
     private Point coordinate;
 
-    @JsonView(Views.ListPlaces.class)
+//    @JsonView(Views.ListPlaces.class)
     private Boolean isFree;
 
     @ManyToOne
+    @JoinColumn(name = "area")
     private ParkingArea area;
 
 
