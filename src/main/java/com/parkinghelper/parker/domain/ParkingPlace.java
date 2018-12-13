@@ -15,13 +15,14 @@ public class ParkingPlace {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonView(Views.ListPlaces.class)
     private Long id;
+
     @JsonView(Views.ListPlaces.class)
     private Point coordinate;
+
     @JsonView(Views.ListPlaces.class)
     private Boolean isFree;
 
     @ManyToOne
-    @JsonView(Views.FullPlace.class)
     private ParkingArea area;
 
 

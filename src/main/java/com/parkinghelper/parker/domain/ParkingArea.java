@@ -4,6 +4,7 @@ package com.parkinghelper.parker.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table
@@ -16,9 +17,12 @@ public class ParkingArea {
     String name;
     Integer freeSpaceCount;
 
-//    @OneToMany(mappedBy = "area",
-//                cascade = CascadeType.ALL)
-//    Set<ParkingPlace> Places;
+    @Transient
+    @OneToMany(mappedBy = "area",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY
+    )
+    Set<ParkingPlace> Places;
 
 
     public ParkingArea() {

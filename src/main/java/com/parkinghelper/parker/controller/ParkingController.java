@@ -1,16 +1,14 @@
 package com.parkinghelper.parker.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.parkinghelper.parker.domain.ParkingPlace;
 import com.parkinghelper.parker.domain.Views;
 import com.parkinghelper.parker.repositories.ParkingPlaceRepository;
-import com.parkinghelper.parker.domain.ParkingPlace;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-//@RestController
 @Controller
 @ResponseBody
 @RequestMapping("/api/parking")
@@ -23,6 +21,15 @@ public class ParkingController {
         this.repository = repository;
     }
 
+//    @GetMapping("test/{id}")
+//    public String test(@PathVariable("id") Long id){
+//        ParkingArea area = repository.getOne((long) id).getArea();
+//        System.out.println(area.getId());
+//        System.out.println(area.getName());
+//        System.out.println(area.getFreeSpaceCount());
+//        return "";
+//    }
+
     @GetMapping
     @JsonView(Views.ListPlaces.class)
     public Iterable<ParkingPlace> get(){
@@ -30,14 +37,12 @@ public class ParkingController {
     }
 
     @GetMapping("{id}")
-    @JsonView(Views.FullPlace.class)
     public ParkingPlace get(@PathVariable("id") ParkingPlace place){
         return place;
     }
 
     @PostMapping
-    public ParkingPlace post(/*@RequestPart("place")*/ ParkingPlace place /*Double x, Double y, Long areaID*/){
-//        ParkingPlace place = new ParkingPlace();
+    public ParkingPlace post(ParkingPlace place){
         return repository.save(place);
     }
 
