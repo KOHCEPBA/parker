@@ -37,7 +37,6 @@ public class AreaController {
     }
 
     @GetMapping
-    @JsonView(Views.ListPlaces.class)
     public Iterable<ParkingArea> get(){
         return repository.findAll();
     }

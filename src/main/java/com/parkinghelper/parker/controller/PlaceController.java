@@ -1,13 +1,10 @@
 package com.parkinghelper.parker.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.parkinghelper.parker.domain.ParkingArea;
 import com.parkinghelper.parker.domain.ParkingPlace;
-import com.parkinghelper.parker.domain.Views;
-import com.parkinghelper.parker.repositories.ParkingAreaRepository;
-import com.parkinghelper.parker.repositories.ParkingPlaceRepository;
+import com.parkinghelper.parker.domain.Point;
+import com.parkinghelper.parker.service.ParkingService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,28 +13,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/place")
 public class PlaceController {
 
-    private final ParkingPlaceRepository repository;
-    private final ParkingAreaRepository areas;
+    private final ParkingService service;
 
-    @Autowired
-    public PlaceController(ParkingPlaceRepository repository, ParkingAreaRepository areas){
-        this.repository = repository;
-        this.areas = areas;
-    }
-
-    @GetMapping("test/{id}")
-    public String test(@PathVariable("id") Long id){
-        ParkingArea area = repository.getOne(id).getArea();
-        System.out.println(area.getId());
-        System.out.println(area.getName());
-        System.out.println(area.getFreeSpaceCount());
-        return "";
+    public PlaceController(ParkingService service) {
+        this.service = service;
     }
 
     @GetMapping
-//    @JsonView(Views.ListPlaces.class)
     public Iterable<ParkingPlace> get(){
-        return repository.findAll();
+        return service.GetAllPlaces();
     }
 
     @GetMapping("{id}")
@@ -47,23 +31,7 @@ public class PlaceController {
 
     @PostMapping
     public ParkingPlace post(ParkingPlace place){
-        repository.saveAndFlush(place);
-
-//        place = repository.getOne(place.getId());
-//
-//        if (place.getIsFree()) {
-//            ParkingArea area = place.getArea();
-//            area.setFreeSpaceCount(area.getFreeSpaceCount() + 1);
-//        }
-
-        //Говнокод, но работает...
-        if (place.getIsFree()) {
-            ParkingArea area = areas.getOne(place.getArea().getId());
-            area.setFreeSpaceCount(area.getFreeSpaceCount() + 1);
-            areas.saveAndFlush(area);
-        }
-
-        return place;
+        return service.CreatePlace(place);
     }
 
     @PutMapping("{id}")
@@ -71,23 +39,21 @@ public class PlaceController {
             @PathVariable("id") ParkingPlace placeDB,
             ParkingPlace place
     ){
-        boolean statChange = place.getIsFree() ^ placeDB.getIsFree();
 
-        BeanUtils.copyProperties(place, placeDB, "id", "area");
 
-        if (statChange)
-        {
-            ParkingArea area = areas.getOne(placeDB.getArea().getId());
-            area.setFreeSpaceCount(area.getFreeSpaceCount() + (placeDB.getIsFree() ? 1 : -1));
-            areas.saveAndFlush(area);
-        }
+        return service.UpdatePlace(place, placeDB);
+    }
 
-        return repository.save(placeDB);
+    @PutMapping
+    public ParkingPlace put(
+            ParkingPlace place
+    ){
+        return service.UpdatePlace(place);
     }
 
     @DeleteMapping("{id}")
     public void delete(@PathVariable("id") ParkingPlace place){
-        repository.delete(place);
+        service.deletePlace(place);
     }
 
 }
