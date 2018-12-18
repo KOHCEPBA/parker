@@ -1,10 +1,7 @@
 package com.parkinghelper.parker.controller;
 
-import com.parkinghelper.parker.domain.ParkingArea;
 import com.parkinghelper.parker.domain.ParkingPlace;
-import com.parkinghelper.parker.domain.Point;
 import com.parkinghelper.parker.service.ParkingService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +18,7 @@ public class PlaceController {
 
     @GetMapping
     public Iterable<ParkingPlace> get(){
-        return service.GetAllPlaces();
+        return service.getAllPlaces();
     }
 
     @GetMapping("{id}")
@@ -31,7 +28,7 @@ public class PlaceController {
 
     @PostMapping
     public ParkingPlace post(ParkingPlace place){
-        return service.CreatePlace(place);
+        return service.savePlace(place);
     }
 
     @PutMapping("{id}")
@@ -41,14 +38,15 @@ public class PlaceController {
     ){
 
 
-        return service.UpdatePlace(place, placeDB);
+        return service.updatePlace(place, placeDB);
+
     }
 
     @PutMapping
     public ParkingPlace put(
             ParkingPlace place
     ){
-        return service.UpdatePlace(place);
+        return service.updatePlace(place);
     }
 
     @DeleteMapping("{id}")

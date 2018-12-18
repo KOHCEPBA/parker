@@ -1,13 +1,7 @@
 package com.parkinghelper.parker.controller;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import com.parkinghelper.parker.domain.ParkingArea;
-import com.parkinghelper.parker.domain.ParkingPlace;
-import com.parkinghelper.parker.domain.Views;
-import com.parkinghelper.parker.repositories.ParkingAreaRepository;
-import com.parkinghelper.parker.repositories.ParkingPlaceRepository;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.parkinghelper.parker.service.ParkingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,29 +10,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/area")
 public class AreaController {
 
-    private final ParkingAreaRepository repository;
+    private final ParkingService service;
 
-    @Autowired
-    public AreaController(ParkingAreaRepository repository){
-        this.repository = repository;
-    }
-
-    @GetMapping("test/{id}")
-    public String test(@PathVariable("id") Long id){
-        ParkingArea area = repository.getOne(id);
-        System.out.println(area.getId());
-        System.out.println(area.getName());
-        System.out.println(area.getFreeSpaceCount());
-//        for (ParkingPlace place: area.getPlaces()
-//             ) {
-//            System.out.println(place.getId() + "" + place.getCoordinate() + "" + place.getIsFree());
-//        }
-        return "";
+    public AreaController(ParkingService service) {
+        this.service = service;
     }
 
     @GetMapping
     public Iterable<ParkingArea> get(){
-        return repository.findAll();
+        return service.getAllAreas();
     }
 
     @GetMapping("{id}")
@@ -48,7 +28,7 @@ public class AreaController {
 
     @PostMapping
     public ParkingArea post(ParkingArea area){
-        return repository.save(area);
+        return service.saveArea(area);
     }
 
     @PutMapping("{id}")
@@ -56,14 +36,19 @@ public class AreaController {
             @PathVariable("id") ParkingArea areaDB,
             ParkingArea area
     ){
-        BeanUtils.copyProperties(area, areaDB, "id");
+        return service.updateArea(area, areaDB);
+    }
 
-        return repository.save(areaDB);
+    @PutMapping
+    public ParkingArea put(
+            ParkingArea area
+    ){
+        return service.updateArea(area);
     }
 
     @DeleteMapping("{id}")
     public void delete(@PathVariable("id") ParkingArea area){
-        repository.delete(area);
+        service.deleteArea(area);
     }
 
 }
