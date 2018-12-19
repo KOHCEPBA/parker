@@ -7,12 +7,13 @@ import com.parkinghelper.parker.PointToJsonSerializer;
 import lombok.Data;
 import com.bedatadriven.jackson.datatype.jts.serialization.GeometryDeserializer;
 import com.bedatadriven.jackson.datatype.jts.serialization.GeometrySerializer;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "t_parking_place")
+@Table(name = "parking_place")
 @Data
 public class ParkingPlace {
 
@@ -22,7 +23,7 @@ public class ParkingPlace {
 
 
     @NotNull
-//    @Column(columnDefinition = "Geometry(Point)")
+    @Column(columnDefinition = "Geometry")
 //    @Type(type = "org.hibernate.spatial.GeometryType")
     @JsonSerialize(using = GeometrySerializer.class)
     @JsonDeserialize(using = GeometryDeserializer.class)
