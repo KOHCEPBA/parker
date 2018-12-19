@@ -2,7 +2,6 @@ package com.parkinghelper.parker.controller;
 
 import com.parkinghelper.parker.domain.ParkingArea;
 import com.parkinghelper.parker.domain.ParkingPlace;
-import com.parkinghelper.parker.domain.Point;
 import com.parkinghelper.parker.service.ParkingService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
