@@ -1,6 +1,7 @@
 package com.parkinghelper.parker.domain;
 
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 import org.postgresql.geometric.PGpoint;
 
@@ -14,7 +15,7 @@ import javax.validation.constraints.NotNull;
 public class ParkingPlace {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull

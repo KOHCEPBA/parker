@@ -2,6 +2,7 @@ package com.parkinghelper.parker.controller;
 
 import com.parkinghelper.parker.domain.ParkingPlace;
 import com.parkinghelper.parker.service.ParkingService;
+import org.postgresql.geometric.PGpoint;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,4 +52,13 @@ public class PlaceController {
         service.deletePlace(place);
     }
 
+    @GetMapping("nearest_free_spaces")
+    public Iterable<ParkingPlace> getNearestFreeSpaces(PGpoint coordinate) {
+        return service.findPlacesNearCoordinate(coordinate, 5);
+    }
+
+    @GetMapping("nearest_free_spaces/{limit}")
+    public Iterable<ParkingPlace> getNearestFreeSpaces(PGpoint coordinate, @PathVariable("limit") Integer limit) {
+        return service.findPlacesNearCoordinate(coordinate, limit);
+    }
 }

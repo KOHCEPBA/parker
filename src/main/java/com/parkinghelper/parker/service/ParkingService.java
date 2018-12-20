@@ -5,7 +5,10 @@ import com.parkinghelper.parker.domain.ParkingArea;
 import com.parkinghelper.parker.domain.ParkingPlace;
 import com.parkinghelper.parker.repositories.ParkingAreaRepository;
 import com.parkinghelper.parker.repositories.ParkingPlaceRepository;
+import org.postgresql.geometric.PGpoint;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ParkingService implements ParkingServiceInterface{
@@ -96,5 +99,13 @@ public class ParkingService implements ParkingServiceInterface{
     @Override
     public void deleteArea(ParkingArea area) {
         areas.delete(area);
+    }
+
+    public Iterable<ParkingPlace> findPlacesNearCoordinate(PGpoint coordinate, Integer limit){
+        if (limit == null || limit == 0) limit = 5;
+
+        Iterable<ParkingPlace> pls = places.findPlacesOrderByDistanceLimited(coordinate.x, coordinate.y, limit);
+
+        return pls;
     }
 }
