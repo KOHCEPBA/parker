@@ -1,7 +1,6 @@
 package com.parkinghelper.parker.domain;
 
 import lombok.Data;
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 import org.postgresql.geometric.PGpoint;
 
