@@ -78,7 +78,12 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		<!--<dependency>-->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.5</version>
+        </dependency>
+        <!--<dependency>-->
 			<!--<groupId>net.postgis</groupId>-->
 			<!--<artifactId>postgis-jdbc</artifactId>-->
 			<!--<version>2.3.0</version>-->

@@ -3,7 +3,6 @@ package com.parkinghelper.parker.domain;
 import lombok.Data;
 import org.hibernate.annotations.Type;
 import org.postgresql.geometric.PGpoint;
-import org.springframework.data.geo.Point;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
