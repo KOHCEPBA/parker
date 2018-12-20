@@ -78,7 +78,7 @@ public class PointUserType implements UserType
     @Override
     public Object deepCopy(Object o) throws HibernateException
     {
-        return (Serializable) o;
+        return o;
     }
 
     @Override
@@ -100,9 +100,9 @@ public class PointUserType implements UserType
     }
 
     @Override
-    public Object replace(Object o, Object o1, Object o2) throws HibernateException
+    public Object replace(final Object original, final Object target, final Object owner) throws HibernateException
     {
-        return this;
+        return original;
     }
 
 }
