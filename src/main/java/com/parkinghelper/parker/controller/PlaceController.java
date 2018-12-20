@@ -1,9 +1,7 @@
 package com.parkinghelper.parker.controller;
 
-import com.parkinghelper.parker.domain.ParkingArea;
 import com.parkinghelper.parker.domain.ParkingPlace;
 import com.parkinghelper.parker.service.ParkingService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,39 +17,37 @@ public class PlaceController {
     }
 
     @GetMapping
-    public Iterable<ParkingPlace> get(){
-        return service.GetAllPlaces();
+    public Iterable<ParkingPlace> get() {
+        return service.getAllPlaces();
     }
 
     @GetMapping("{id}")
-    public ParkingPlace get(@PathVariable("id") ParkingPlace place){
+    public ParkingPlace get(@PathVariable("id") ParkingPlace place) {
         return place;
     }
 
     @PostMapping
-    public ParkingPlace post(ParkingPlace place){
-        return service.CreatePlace(place);
+    public ParkingPlace post(ParkingPlace place) {
+        return service.savePlace(place);
     }
 
     @PutMapping("{id}")
     public ParkingPlace put(
             @PathVariable("id") ParkingPlace placeDB,
             ParkingPlace place
-    ){
-
-
-        return service.UpdatePlace(place, placeDB);
+    ) {
+        return service.updatePlace(place, placeDB);
     }
 
     @PutMapping
     public ParkingPlace put(
             ParkingPlace place
-    ){
-        return service.UpdatePlace(place);
+    ) {
+        return service.updatePlace(place);
     }
 
     @DeleteMapping("{id}")
-    public void delete(@PathVariable("id") ParkingPlace place){
+    public void delete(@PathVariable("id") ParkingPlace place) {
         service.deletePlace(place);
     }
 

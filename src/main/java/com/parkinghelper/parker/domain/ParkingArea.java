@@ -12,7 +12,7 @@ import java.util.Set;
 public class ParkingArea {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
     Integer freeSpaceCount;
