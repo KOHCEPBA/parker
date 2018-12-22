@@ -1,6 +1,6 @@
-package com.parkinghelper.parker.domain;
+package com.parkinghelper.parker.domain.Filters;
 
-public class Views {
+public class ViewsFilter {
     public interface ListPlaces{}
 
     public interface FullPlace extends ListPlaces{}

@@ -19,7 +19,7 @@ public class ParkingPlace {
 
     @NotNull
     @Column(name = "coordinate", columnDefinition = "Point")
-    @Type(type = "com.parkinghelper.parker.domain.PointUserType")
+    @Type(type = "com.parkinghelper.parker.domain.types.PointUserType")
     private PGpoint coordinate;
 
     private Boolean isFree;

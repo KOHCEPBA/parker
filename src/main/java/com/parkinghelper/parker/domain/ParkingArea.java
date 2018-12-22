@@ -16,6 +16,8 @@ public class ParkingArea {
     String name;
     Integer freeSpaceCount;
 
+//    org.postgresql.geometric.PGbox
+
 //    @OneToMany(mappedBy = "area",
 //            cascade = CascadeType.ALL
 ////            fetch = FetchType.LAZY
