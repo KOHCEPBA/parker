@@ -11,6 +11,8 @@ import org.hibernate.usertype.UserType;
         import org.postgresql.geometric.PGpoint;
 
 
+
+        //Hibernate custom type
 public class PointUserType implements UserType
 {
 

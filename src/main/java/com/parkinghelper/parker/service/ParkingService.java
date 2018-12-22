@@ -8,8 +8,6 @@ import com.parkinghelper.parker.repositories.ParkingPlaceRepository;
 import org.postgresql.geometric.PGpoint;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class ParkingService implements ParkingServiceInterface{
 
@@ -101,11 +99,20 @@ public class ParkingService implements ParkingServiceInterface{
         areas.delete(area);
     }
 
+    @Override
     public Iterable<ParkingPlace> findPlacesNearCoordinate(PGpoint coordinate, Integer limit){
-        if (limit == null || limit == 0) limit = 5;
+        if (limit == null || limit <= 0) limit = 5;
 
         Iterable<ParkingPlace> pls = places.findPlacesOrderByDistanceLimited(coordinate.x, coordinate.y, limit);
 
         return pls;
+    }
+
+    @Override
+    public Iterable<ParkingPlace> findFreePlacesByAreaName(String name) {
+        if (name != null && name != "")
+            return places.findPlacesByAreaNameIgnoreCaseContainingAndIsFreeTrue(name);
+        else
+        throw new IllegalArgumentException(name);
     }
 }

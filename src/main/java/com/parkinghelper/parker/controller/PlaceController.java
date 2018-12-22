@@ -61,4 +61,10 @@ public class PlaceController {
     public Iterable<ParkingPlace> getNearestFreeSpaces(PGpoint coordinate, @PathVariable("limit") Integer limit) {
         return service.findPlacesNearCoordinate(coordinate, limit);
     }
+
+    @GetMapping("area_places/{name}")
+    public Iterable<ParkingPlace> getFreePlacesByAreaName(@PathVariable("name") String name){
+        return service.findFreePlacesByAreaName(name);
+    }
+
 }

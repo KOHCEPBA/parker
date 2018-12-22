@@ -16,4 +16,6 @@ public interface ParkingPlaceRepository extends JpaRepository<ParkingPlace,Long>
     @Query(value = "Select * from parking_place as pl where pl.is_free = true Order By pl.coordinate <-> Point(?1, ?2) LIMIT ?3", nativeQuery = true)
     Iterable<ParkingPlace> findPlacesOrderByDistanceLimited(Double x, Double y, Integer limit);
 
+    Iterable<ParkingPlace> findPlacesByAreaNameIgnoreCaseContainingAndIsFreeTrue(String name);
+
 }

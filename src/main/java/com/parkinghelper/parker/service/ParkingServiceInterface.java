@@ -2,6 +2,7 @@ package com.parkinghelper.parker.service;
 
 import com.parkinghelper.parker.domain.ParkingArea;
 import com.parkinghelper.parker.domain.ParkingPlace;
+import org.postgresql.geometric.PGpoint;
 
 public interface ParkingServiceInterface {
 
@@ -22,4 +23,8 @@ public interface ParkingServiceInterface {
     ParkingArea saveArea(ParkingArea area);
 
     void deleteArea(ParkingArea area);
+
+    Iterable<ParkingPlace> findPlacesNearCoordinate(PGpoint coordinate, Integer limit);
+
+    Iterable<ParkingPlace> findFreePlacesByAreaName(String name);
 }
