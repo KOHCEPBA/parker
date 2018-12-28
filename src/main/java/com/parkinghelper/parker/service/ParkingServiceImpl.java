@@ -4,7 +4,7 @@ import com.parkinghelper.parker.domain.ParkingArea;
 import com.parkinghelper.parker.domain.ParkingPlace;
 import org.postgresql.geometric.PGpoint;
 
-public interface ParkingServiceInterface {
+public interface ParkingServiceImpl {
 
     Iterable<ParkingPlace> getAllPlaces();
 

@@ -3,8 +3,6 @@ package com.parkinghelper.parker.domain.types;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;
-import org.postgresql.geometric.PGbox;
-import org.postgresql.geometric.PGpoint;
 
 import java.io.Serializable;
 import java.sql.PreparedStatement;
@@ -23,7 +21,7 @@ public class BoxUserType implements UserType {
         if (resultSet.wasNull()) {
             return null;
         }
-        final PGbox box = new PGbox(resultSet.getObject(names[0]).toString());
+        final Zone box = new Zone(resultSet.getObject(names[0]).toString());
         return box;
     }
 
@@ -44,7 +42,7 @@ public class BoxUserType implements UserType {
     @SuppressWarnings("rawtypes")
     @Override
     public Class returnedClass() {
-        return PGbox.class;
+        return Zone.class;
     }
 
     @Override

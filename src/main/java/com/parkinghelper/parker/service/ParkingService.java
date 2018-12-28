@@ -3,13 +3,14 @@ package com.parkinghelper.parker.service;
 import com.parkinghelper.parker.CopyProperties;
 import com.parkinghelper.parker.domain.ParkingArea;
 import com.parkinghelper.parker.domain.ParkingPlace;
+import com.parkinghelper.parker.domain.types.Zone;
 import com.parkinghelper.parker.repositories.ParkingAreaRepository;
 import com.parkinghelper.parker.repositories.ParkingPlaceRepository;
 import org.postgresql.geometric.PGpoint;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ParkingService implements ParkingServiceInterface{
+public class ParkingService implements ParkingServiceImpl {
 
     private final ParkingPlaceRepository places;
     private final ParkingAreaRepository areas;
@@ -26,7 +27,6 @@ public class ParkingService implements ParkingServiceInterface{
     }
 
     private void changeAreaPlacecount(ParkingPlace place) {
-        //Говнокод, но работает...
         ParkingArea area = areas.getOne(place.getArea().getId());
         area.setFreeSpaceCount(area.getFreeSpaceCount() + (place.getIsFree() ? 1 : -1));
         areas.saveAndFlush(area);
@@ -34,9 +34,12 @@ public class ParkingService implements ParkingServiceInterface{
 
     @Override
     public ParkingPlace updatePlace(ParkingPlace placeNew, ParkingPlace placeOld) {
+        if (placeNew.getCoordinate() != null &&
+                !CheckContainsPoint(areas.getOne(placeNew.getArea().getId()).getZoneCoordinate(), placeNew.getCoordinate()))
+            SayIllegalCoordinateException(areas.getOne(placeNew.getArea().getId()).getZoneCoordinate());
 
-        boolean statChange = placeOld.getIsFree() ^ placeNew.getIsFree();   //Состояние места изменено
-        CopyProperties.copyProperties(placeNew, placeOld, "id"); //Копирование полей из нового в старый
+        boolean statChange = placeOld.getIsFree() ^ placeNew.getIsFree();   //State change flag
+        CopyProperties.copyProperties(placeNew, placeOld, "id"); //Copy fields from new to old place
         if (statChange) changeAreaPlacecount(placeOld);
 
         return places.saveAndFlush(placeOld);
@@ -47,14 +50,17 @@ public class ParkingService implements ParkingServiceInterface{
 
         ParkingPlace placeOld = places.getOne(place.getId());
 
+
         return
                 (placeOld != null) ?
-                        updatePlace(place,placeOld) :
+                        updatePlace(place, placeOld) :
                         savePlace(place);
     }
 
     @Override
     public ParkingPlace savePlace(ParkingPlace place) {
+        if (!CheckContainsPoint(areas.getOne(place.getArea().getId()).getZoneCoordinate(), place.getCoordinate()))
+            SayIllegalCoordinateException(areas.getOne(place.getArea().getId()).getZoneCoordinate());
 
         if (place.getIsFree()) changeAreaPlacecount(place);
 
@@ -85,7 +91,7 @@ public class ParkingService implements ParkingServiceInterface{
 
         return
                 (areaOld != null) ?
-                        updateArea(area,areaOld) :
+                        updateArea(area, areaOld) :
                         saveArea(area);
     }
 
@@ -100,7 +106,7 @@ public class ParkingService implements ParkingServiceInterface{
     }
 
     @Override
-    public Iterable<ParkingPlace> findPlacesNearCoordinate(PGpoint coordinate, Integer limit){
+    public Iterable<ParkingPlace> findPlacesNearCoordinate(PGpoint coordinate, Integer limit) {
         if (limit == null || limit <= 0) limit = 5;
 
         Iterable<ParkingPlace> pls = places.findPlacesOrderByDistanceLimited(coordinate.x, coordinate.y, limit);
@@ -110,9 +116,15 @@ public class ParkingService implements ParkingServiceInterface{
 
     @Override
     public Iterable<ParkingPlace> findFreePlacesByAreaName(String name) {
-        if (name != null && name != "")
-            return places.findPlacesByAreaNameIgnoreCaseContainingAndIsFreeTrue(name);
-        else
-        throw new IllegalArgumentException(name);
+        return places.findPlacesByAreaNameIgnoreCaseContainingAndIsFreeTrueOrderById(name);
+    }
+
+    private boolean CheckContainsPoint(Zone box, PGpoint point) {
+        if (point == null || box == null) return false;
+        else return box.contains(point);
+    }
+
+    private void SayIllegalCoordinateException(Zone box) {
+        throw new IllegalArgumentException("Illegal place coordinate. It must be contained in squere " + box);
     }
 }
