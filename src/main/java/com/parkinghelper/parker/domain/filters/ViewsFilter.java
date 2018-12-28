@@ -1,4 +1,4 @@
-package com.parkinghelper.parker.domain.Filters;
+package com.parkinghelper.parker.domain.filters;
 
 public class ViewsFilter {
     public interface ListPlaces{}
