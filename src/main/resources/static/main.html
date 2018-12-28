@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Fixed top navbar example for Bootstrap</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+    <a class="navbar-brand" href="#">Parking system</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<main role="main" class="container">
+    <div class="jumbotron">
+        <h1>Parking</h1>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-light" id="addZone">Добавить зону</button>
+            <button type="button" class="btn btn-light" id="addParking">Добавить парковочное место</button>
+        </div>
+        <div class="lead" id="zones_place" style="margin: 0 auto; text-align: center; border:1px solid #515151;position: relative; width: 100%; height: 700px;"></div>
+    </div>
+</main>
+
+
+<script src="/js/jquery-3.3.1.slim.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.canvasAreaDraw.js"></script>
+<script src="/js/main.js"></script>
+</body>
+</html>

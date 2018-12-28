@@ -22,6 +22,7 @@ public class ParkingPlace {
     @Type(type = "com.parkinghelper.parker.domain.types.PointUserType")
     private PGpoint coordinate;
 
+    @JoinColumn(name = "is_free")
     private Boolean isFree;
 
     @ManyToOne

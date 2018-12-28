@@ -1,0 +1,28 @@
+body {
+    min-height: 75rem;
+    padding-top: 4.5rem;
+    cursor: default;
+}
+
+.zone {
+    position: absolute;
+    background-color: #7faee2;
+    z-index: 5;
+}
+
+.parking {
+    position: absolute;
+    z-index: 10;
+}
+
+.free {
+    background-color: #999699;
+}
+
+.not_free {
+    background-color: #992322;
+}
+
+.edit {
+    cursor: pointer;
+}
