@@ -1,7 +1,7 @@
 package com.parkinghelper.parker.service;
 
 import com.parkinghelper.parker.CopyProperties;
-import com.parkinghelper.parker.domain.ParkingArea;
+import com.parkinghelper.parker.domain.ParkingGeoArea;
 import com.parkinghelper.parker.domain.ParkingPlace;
 import com.parkinghelper.parker.domain.types.Zone;
 import com.parkinghelper.parker.repositories.ParkingAreaRepository;
@@ -103,20 +103,6 @@ public class ParkingService implements ParkingServiceImpl {
     @Override
     public void deleteArea(ParkingArea area) {
         areas.delete(area);
-    }
-
-    @Override
-    public Iterable<ParkingPlace> findPlacesNearCoordinate(PGpoint coordinate, Integer limit) {
-        if (limit == null || limit <= 0) limit = 5;
-
-        Iterable<ParkingPlace> pls = places.findPlacesOrderByDistanceLimited(coordinate.x, coordinate.y, limit);
-
-        return pls;
-    }
-
-    @Override
-    public Iterable<ParkingPlace> findFreePlacesByAreaName(String name) {
-        return places.findPlacesByAreaNameIgnoreCaseContainingAndIsFreeTrueOrderById(name);
     }
 
     private boolean CheckContainsPoint(Zone box, PGpoint point) {
