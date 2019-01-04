@@ -27,9 +27,5 @@ public class ParkingPlace {
 
     @ManyToOne
     @JoinColumn(name = "area")
-    private ParkingArea area;
-
-
-    public ParkingPlace() {
-    }
+    private ParkingGeoArea area;
 }

@@ -1,8 +1,9 @@
 package com.parkinghelper.parker.controller;
 
+import com.parkinghelper.parker.domain.AreaGeoAddress;
 import com.parkinghelper.parker.domain.ParkingPlace;
 import com.parkinghelper.parker.service.ParkingService;
-import com.parkinghelper.parker.service.find.FindParkingSevice;
+import com.parkinghelper.parker.service.find.FindParkingService;
 import org.postgresql.geometric.PGpoint;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 public class PlaceController {
 
     private final ParkingService service;
-    private final FindParkingSevice findService;
+    private final FindParkingService findService;
 
-    public PlaceController(ParkingService service, FindParkingSevice findService) {
+    public PlaceController(ParkingService service, FindParkingService findService) {
         this.service = service;
         this.findService = findService;
     }
@@ -65,9 +66,9 @@ public class PlaceController {
         return findService.findPlacesNearCoordinate(coordinate, limit);
     }
 
-    @GetMapping("area_places/{name}")
-    public Iterable<ParkingPlace> getFreePlacesByAreaName(@PathVariable("name") String name){
-        return findService.findFreePlacesByAreaName(name);
+    @GetMapping("area_places/address")
+    public Iterable<ParkingPlace> getFreePlacesByAreaAddress(AreaGeoAddress address){
+        return findService.findFreePlacesByAreaAddress(address);
     }
 
 }

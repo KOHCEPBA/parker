@@ -27,7 +27,7 @@ public class ParkingService implements ParkingServiceImpl {
     }
 
     private void changeAreaPlacecount(ParkingPlace place) {
-        ParkingArea area = areas.getOne(place.getArea().getId());
+        ParkingGeoArea area = areas.getOne(place.getArea().getId());
         area.setFreeSpaceCount(area.getFreeSpaceCount() + (place.getIsFree() ? 1 : -1));
         areas.saveAndFlush(area);
     }
@@ -73,21 +73,21 @@ public class ParkingService implements ParkingServiceImpl {
     }
 
     @Override
-    public Iterable<ParkingArea> getAllAreas() {
+    public Iterable<ParkingGeoArea> getAllAreas() {
         return areas.findAll();
     }
 
     @Override
-    public ParkingArea updateArea(ParkingArea areaNew, ParkingArea areaOld) {
+    public ParkingGeoArea updateArea(ParkingGeoArea areaNew, ParkingGeoArea areaOld) {
         CopyProperties.copyProperties(areaNew, areaOld, "id", "null"); //Копирование полей из нового в старый
 
         return areas.saveAndFlush(areaOld);
     }
 
     @Override
-    public ParkingArea updateArea(ParkingArea area) {
+    public ParkingGeoArea updateArea(ParkingGeoArea area) {
 
-        ParkingArea areaOld = areas.getOne(area.getId());
+        ParkingGeoArea areaOld = areas.getOne(area.getId());
 
         return
                 (areaOld != null) ?
@@ -96,12 +96,12 @@ public class ParkingService implements ParkingServiceImpl {
     }
 
     @Override
-    public ParkingArea saveArea(ParkingArea area) {
+    public ParkingGeoArea saveArea(ParkingGeoArea area) {
         return areas.saveAndFlush(area);
     }
 
     @Override
-    public void deleteArea(ParkingArea area) {
+    public void deleteArea(ParkingGeoArea area) {
         areas.delete(area);
     }
 
