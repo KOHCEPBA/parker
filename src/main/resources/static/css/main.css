@@ -4,15 +4,37 @@ body {
     cursor: default;
 }
 
-.zone {
+.zone, .zone-search {
     position: absolute;
     background-color: #7faee2;
     z-index: 5;
 }
 
-.parking {
+.zone {
+    transition: .5s;
+    border: 2px solid transparent;
+}
+
+.zone:hover {
+    cursor: pointer;
+    border-color: #ff3d01;
+    transition: .5s;
+}
+
+.parking, .parking-search {
     position: absolute;
     z-index: 10;
+}
+
+.parking {
+    transition: .5s;
+    border: 2px solid transparent;
+}
+
+.parking:hover {
+    cursor: pointer;
+    border-color: #fffc00;
+    transition: .5s;
 }
 
 .free {
@@ -23,6 +45,23 @@ body {
     background-color: #992322;
 }
 
-.edit {
-    cursor: pointer;
+.selected {
+    border: 2px solid #1cff3f !important;
+}
+
+.edit, .search {
+    cursor: crosshair !important;
+}
+
+.search {
+    background-color: rgba(154, 255, 102, 0.30);
+}
+
+.found {
+    background-color: #08ff00 !important;
+}
+
+.error {
+    background: rgba(255, 0, 0, 0.15);
+    border: 1px solid #d41c1c;
 }

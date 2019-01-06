@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Fixed top navbar example for Bootstrap</title>
+    <title>Parking system</title>
 
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/main.css">
@@ -30,14 +30,108 @@
 <main role="main" class="container">
     <div class="jumbotron">
         <h1>Parking</h1>
-        <div class="btn-group" role="group">
-            <button type="button" class="btn btn-light" id="addZone">Добавить зону</button>
-            <button type="button" class="btn btn-light" id="addParking">Добавить парковочное место</button>
+
+        <div class="btn-toolbar justify-content-between" role="toolbar">
+            <div class="btn-group" role="group">
+                <button type="button" class="btn btn-light" id="addZone">Добавить зону</button>
+                <button type="button" class="btn btn-light" id="addParking">Добавить парковочное место</button>
+            </div>
+
+            <div class="btn-group" role="group">
+                <div class="dropdown">
+                    <button class="btn btn-light dropdown-toggle" type="button" id="parkingsButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Парковка
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="parkingsButton">
+                        <a class="dropdown-item" href="#" id="searchParkingsButton">Найти места (По точке на карте)</a>
+                        <a class="dropdown-item" href="#" id="searchParkingsByZoneButton">Найти места (В зоне)</a>
+                        <a class="dropdown-item" href="#" id="clearParkingsButton">Очистить найденные</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group" role="group">
+                <div class="dropdown" id="actionsDropdown" style="display: none;">
+                    <button class="btn btn-light dropdown-toggle" type="button" id="actionsButton"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Действия
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="actionsButton">
+                        <a class="dropdown-item" href="#" id="editButton">Изменить</a>
+                        <a class="dropdown-item" href="#" id="deleteButton">Удалить</a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="lead" id="zones_place" style="margin: 0 auto; text-align: center; border:1px solid #515151;position: relative; width: 100%; height: 700px;"></div>
+
+        <div class="lead" id="zones_place"
+             style="margin: 0 auto; text-align: center; border:1px solid #515151;position: relative; width: 100%; height: 700px;"></div>
     </div>
 </main>
 
+<div class="modal fade" id="editModalZone" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalZoneTitle">Свойства</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group row">
+                        <label for="editModalZoneName">Имя зоны</label>
+                        <input class="form-control" id="editModalZoneName">
+                    </div>
+
+                    <div class="form-group row sizeZone">
+                        <label for="editModalZoneXSize">Ширина зоны</label>
+                        <input type="number" class="form-control" id="editModalZoneXSize">
+                    </div>
+
+                    <div class="form-group row sizeZone">
+                        <label for="editModalZoneYSize">Высота зоны</label>
+                        <input type="number" class="form-control" id="editModalZoneYSize">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary" id="saveZone">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editModalParking" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalParkingTitle">Свойства</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="editModalParkingState">Статус парковочного места</label>
+                        <select class="form-control" id="editModalParkingState">
+                            <option value="true">Свободно</option>
+                            <option value="false">Занято</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                <button type="button" class="btn btn-primary" id="saveParking">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="/js/jquery-3.3.1.slim.min.js"></script>
 <script src="/js/popper.min.js"></script>
