@@ -52,17 +52,17 @@ public class PlaceController {
         service.deletePlace(place);
     }
 
-    @GetMapping("nearest_free_spaces")
-    public Iterable<ParkingPlace> getNearestFreeSpaces(PGpoint coordinate) {
-        return service.findPlacesNearCoordinate(coordinate, 5);
+    @PostMapping("nearest_free_spaces")
+    public Iterable<ParkingPlace> getNearestFreeSpaces(/*Point coordinate*/Double x, Double y) {
+        return service.findPlacesNearCoordinate(new PGpoint(x, y), 5);
     }
 
-    @GetMapping("nearest_free_spaces/{limit}")
-    public Iterable<ParkingPlace> getNearestFreeSpaces(PGpoint coordinate, @PathVariable("limit") Integer limit) {
-        return service.findPlacesNearCoordinate(coordinate, limit);
+    @PostMapping("nearest_free_spaces/{limit}")
+    public Iterable<ParkingPlace> getNearestFreeSpaces(Double x, Double y, @PathVariable("limit") Integer limit) {
+        return service.findPlacesNearCoordinate(new PGpoint(x, y), limit);
     }
 
-    @GetMapping("area_places/{name}")
+    @PostMapping("area_places/{name}")
     public Iterable<ParkingPlace> getFreePlacesByAreaName(@PathVariable("name") String name){
         return service.findFreePlacesByAreaName(name);
     }
