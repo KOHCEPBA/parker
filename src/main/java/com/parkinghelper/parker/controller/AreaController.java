@@ -17,22 +17,22 @@ public class AreaController {
     }
 
     @GetMapping
-    public Iterable<ParkingArea> get(){
+    public Iterable<ParkingArea> getAllAreas(){
         return service.getAllAreas();
     }
 
     @GetMapping("{id}")
-    public ParkingArea get(@PathVariable("id") ParkingArea area){
+    public ParkingArea getAreaByID(@PathVariable("id") ParkingArea area){
         return area;
     }
 
     @PostMapping
-    public ParkingArea post(ParkingArea area){
+    public ParkingArea createNewArea(ParkingArea area){
         return service.saveArea(area);
     }
 
     @PutMapping("{id}")
-    public ParkingArea put(
+    public ParkingArea updateAreaByID(
             @PathVariable("id") ParkingArea areaDB,
             ParkingArea area
     ){
@@ -40,14 +40,14 @@ public class AreaController {
     }
 
     @PutMapping
-    public ParkingArea put(
+    public ParkingArea updateOrCreateArea(
             ParkingArea area
     ){
         return service.updateArea(area);
     }
 
     @DeleteMapping("{id}")
-    public void delete(@PathVariable("id") ParkingArea area){
+    public void deletePlaceByID(@PathVariable("id") ParkingArea area){
         service.deleteArea(area);
     }
 

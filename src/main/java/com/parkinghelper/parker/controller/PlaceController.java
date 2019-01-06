@@ -18,22 +18,22 @@ public class PlaceController {
     }
 
     @GetMapping
-    public Iterable<ParkingPlace> get() {
+    public Iterable<ParkingPlace> getAllPlaces() {
         return service.getAllPlaces();
     }
 
     @GetMapping("{id}")
-    public ParkingPlace get(@PathVariable("id") ParkingPlace place) {
+    public ParkingPlace getPlaceByID(@PathVariable("id") ParkingPlace place) {
         return place;
     }
 
     @PostMapping
-    public ParkingPlace post(ParkingPlace place) {
+    public ParkingPlace createNewPlace(ParkingPlace place) {
         return service.savePlace(place);
     }
 
     @PutMapping("{id}")
-    public ParkingPlace put(
+    public ParkingPlace updatePlaceByID(
             @PathVariable("id") ParkingPlace placeDB,
             ParkingPlace place
     ) {
@@ -41,14 +41,14 @@ public class PlaceController {
     }
 
     @PutMapping
-    public ParkingPlace put(
+    public ParkingPlace updateOrCreatePlace(
             ParkingPlace place
     ) {
         return service.updatePlace(place);
     }
 
     @DeleteMapping("{id}")
-    public void delete(@PathVariable("id") ParkingPlace place) {
+    public void deletePlaceByID(@PathVariable("id") ParkingPlace place) {
         service.deletePlace(place);
     }
 
