@@ -1,7 +1,9 @@
 package com.parkinghelper.parker.controller;
 
+import com.parkinghelper.parker.domain.AreaGeoAddress;
 import com.parkinghelper.parker.domain.ParkingPlace;
 import com.parkinghelper.parker.service.ParkingService;
+import com.parkinghelper.parker.service.find.FindParkingService;
 import org.postgresql.geometric.PGpoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +20,11 @@ import static org.springframework.http.ResponseEntity.status;
 public class PlaceController {
 
     private final ParkingService service;
+    private final FindParkingService findService;
 
-    public PlaceController(ParkingService service) {
+    public PlaceController(ParkingService service, FindParkingService findService) {
         this.service = service;
+        this.findService = findService;
     }
 
     @GetMapping
@@ -83,9 +87,9 @@ public class PlaceController {
         return service.findPlacesNearCoordinate(new PGpoint(x, y), limit);
     }
 
-    @PostMapping("area_places/{name}")
-    public Iterable<ParkingPlace> getFreePlacesByAreaName(@PathVariable("name") String name){
-        return service.findFreePlacesByAreaName(name);
+    @PostMapping("area_places/address")
+    public Iterable<ParkingPlace> getFreePlacesByAreaAddress(AreaGeoAddress address){
+        return findService.findFreePlacesByAreaAddress(address);
     }
 
 }

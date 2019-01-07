@@ -11,15 +11,21 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "parking_area")
 @Data
-public class ParkingArea {
+public class ParkingGeoArea {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
-    @Column(name = "name", unique = true)
-    String name;
+    private Long id;
+//    @Column(name = "name", unique = true)
+//    String name;
+
+//    @Column(name = "area_address")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address", updatable = false)
+    private AreaGeoAddress geoAddress;
+
     @Column(name = "free_space_count")
-    Integer freeSpaceCount;
+    private Integer freeSpaceCount;
 
     @NotNull
     @Column(name = "zone_coordinate", columnDefinition = "box")
@@ -33,6 +39,6 @@ public class ParkingArea {
 //    Set<ParkingPlace> Places;
 
 
-    public ParkingArea() {
+    public ParkingGeoArea() {
     }
 }

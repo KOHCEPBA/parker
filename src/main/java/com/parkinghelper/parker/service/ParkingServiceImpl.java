@@ -1,6 +1,6 @@
 package com.parkinghelper.parker.service;
 
-import com.parkinghelper.parker.domain.ParkingArea;
+import com.parkinghelper.parker.domain.ParkingGeoArea;
 import com.parkinghelper.parker.domain.ParkingPlace;
 import org.postgresql.geometric.PGpoint;
 
@@ -15,16 +15,12 @@ public interface ParkingServiceImpl {
 
     void deletePlace(ParkingPlace place);
 
-    Iterable<ParkingArea> getAllAreas();
+    Iterable<ParkingGeoArea> getAllAreas();
 
-    ParkingArea updateArea(ParkingArea areaNew, ParkingArea areaOld);
-    ParkingArea updateArea(ParkingArea area);
+    ParkingGeoArea updateArea(ParkingGeoArea areaNew, ParkingGeoArea areaOld);
+    ParkingGeoArea updateArea(ParkingGeoArea area);
 
-    ParkingArea saveArea(ParkingArea area);
+    ParkingGeoArea saveArea(ParkingGeoArea area);
 
-    void deleteArea(ParkingArea area);
-
-    Iterable<ParkingPlace> findPlacesNearCoordinate(PGpoint coordinate, Integer limit);
-
-    Iterable<ParkingPlace> findFreePlacesByAreaName(String name);
+    void deleteArea(ParkingGeoArea area);
 }
