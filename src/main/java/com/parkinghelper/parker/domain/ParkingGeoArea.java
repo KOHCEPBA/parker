@@ -19,8 +19,9 @@ public class ParkingGeoArea {
 //    @Column(name = "name", unique = true)
 //    String name;
 
-    @Column(name = "area_address")
-    @OneToOne
+//    @Column(name = "area_address")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address", updatable = false)
     private AreaGeoAddress geoAddress;
 
     @Column(name = "free_space_count")

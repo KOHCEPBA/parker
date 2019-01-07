@@ -66,7 +66,7 @@ public class PlaceController {
         return findService.findPlacesNearCoordinate(coordinate, limit);
     }
 
-    @GetMapping("area_places/address")
+    @PostMapping("area_places/address")
     public Iterable<ParkingPlace> getFreePlacesByAreaAddress(AreaGeoAddress address){
         return findService.findFreePlacesByAreaAddress(address);
     }
