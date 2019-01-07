@@ -47,9 +47,7 @@ public class ParkingService implements ParkingServiceImpl {
 
     @Override
     public ParkingPlace updatePlace(ParkingPlace place) {
-
         ParkingPlace placeOld = places.getOne(place.getId());
-
 
         return
                 (placeOld != null) ?

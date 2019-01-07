@@ -3,8 +3,14 @@ package com.parkinghelper.parker.controller;
 import com.parkinghelper.parker.domain.ParkingPlace;
 import com.parkinghelper.parker.service.ParkingService;
 import org.postgresql.geometric.PGpoint;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.beans.Expression;
+
+import static org.springframework.http.ResponseEntity.status;
 
 @Controller
 @ResponseBody
@@ -28,23 +34,38 @@ public class PlaceController {
     }
 
     @PostMapping
-    public ParkingPlace createNewPlace(ParkingPlace place) {
-        return service.savePlace(place);
+    public ResponseEntity saveNewPlace(ParkingPlace place) {
+        try {
+            return ResponseEntity.ok(service.savePlace(place));
+        }catch (IllegalArgumentException e)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @PutMapping("{id}")
-    public ParkingPlace updatePlaceByID(
+    public ResponseEntity updatePlaceByID(
             @PathVariable("id") ParkingPlace placeDB,
             ParkingPlace place
     ) {
-        return service.updatePlace(place, placeDB);
+        try {
+            return ResponseEntity.ok(service.updatePlace(place, placeDB));
+        }catch (IllegalArgumentException e)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @PutMapping
-    public ParkingPlace updateOrCreatePlace(
+    public ResponseEntity updateOrCreatePlace(
             ParkingPlace place
     ) {
-        return service.updatePlace(place);
+        try {
+            return ResponseEntity.ok(service.updatePlace(place));
+        }catch (IllegalArgumentException e)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     @DeleteMapping("{id}")
