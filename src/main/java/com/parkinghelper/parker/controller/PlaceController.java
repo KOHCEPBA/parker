@@ -10,10 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.beans.Expression;
-
-import static org.springframework.http.ResponseEntity.status;
-
 @Controller
 @ResponseBody
 @RequestMapping("/api/place")
@@ -78,13 +74,13 @@ public class PlaceController {
     }
 
     @PostMapping("nearest_free_spaces")
-    public Iterable<ParkingPlace> getNearestFreeSpaces(/*Point coordinate*/Double x, Double y) {
-        return service.findPlacesNearCoordinate(new PGpoint(x, y), 5);
+    public Iterable<ParkingPlace> getNearestFreeSpaces(@RequestParam PGpoint coordinate) {
+        return findService.findPlacesNearCoordinate(coordinate, 5);
     }
 
     @PostMapping("nearest_free_spaces/{limit}")
-    public Iterable<ParkingPlace> getNearestFreeSpaces(Double x, Double y, @PathVariable("limit") Integer limit) {
-        return service.findPlacesNearCoordinate(new PGpoint(x, y), limit);
+    public Iterable<ParkingPlace> getNearestFreeSpaces(@RequestParam PGpoint coordinate, @PathVariable("limit") Integer limit) {
+        return findService.findPlacesNearCoordinate(coordinate, limit);
     }
 
     @PostMapping("area_places/address")

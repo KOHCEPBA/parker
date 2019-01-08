@@ -476,7 +476,7 @@ function searchPlaces(coords) {
     var http = new XMLHttpRequest();
     http.open('POST', '/api/place/nearest_free_spaces/' + searchLimitBuff, true);
     http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    var body = 'x=' + coords.x + '&y=' + coords.y;
+    var body = 'coordinate=(' + coords.x + ', ' + coords.y + ')';
     http.send(body);
     http.onreadystatechange = function () {
         if (http.readyState == 4) {
