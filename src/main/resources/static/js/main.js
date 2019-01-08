@@ -264,7 +264,7 @@ function getList() {
                     }
 
                     var aboutZone = {
-                        name: v.name,
+                        geoAddress: v.geoAddress,
                         areaID: v.id,
                         x: x,
                         y: y,
@@ -303,7 +303,10 @@ function getList() {
 }
 
 function drawZone(params) {
-    $("#zones_place").append('<div class="zone" zone-id="' + params.areaID + '" zone-name="' + params.name + '" id="zone-' + params.areaID + '" style="width: ' + Math.abs(params.sizeX) + 'px; height: ' + Math.abs(params.sizeY) + 'px; margin-left: ' + params.x + 'px; margin-top: ' + params.y + 'px;"></div>');
+    $("#zones_place").append('<div class="zone" zone-id="' + params.areaID + '" zone-address="' +
+        params.geoAddress + '" id="zone-' + params.areaID + '" style="width: ' +
+        Math.abs(params.sizeX) + 'px; height: ' + Math.abs(params.sizeY) + 'px; margin-left: ' +
+        params.x + 'px; margin-top: ' + params.y + 'px;"></div>');
 }
 
 function drawParking(params) {
@@ -315,7 +318,10 @@ function drawParking(params) {
         isFree = 'not_free';
     }
 
-    $("#zones_place").append('<div class="parking ' + isFree + '" zone-id="' + params.areaID + '" park-id="' + params.id + '" id="park-' + params.id + '" style="width: ' + parkingSize + 'px; height: ' + parkingSize + 'px; margin-left: ' + params.x + 'px; margin-top: ' + params.y + 'px;"></div>');
+    $("#zones_place").append('<div class="parking ' + isFree + '" zone-id="' +
+        params.areaID + '" park-id="' + params.id + '" id="park-' +
+        params.id + '" style="width: ' + parkingSize + 'px; height: ' +
+        parkingSize + 'px; margin-left: ' + params.x + 'px; margin-top: ' + params.y + 'px;"></div>');
 }
 
 function getMousePos(div, e) {
@@ -328,9 +334,10 @@ function getMousePos(div, e) {
 
 function saveZone(params) {
     var http = new XMLHttpRequest();
-    http.open('POST', '/api/area', true);
+    http.open('PUT', '/api/area', true);
     http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    var body = 'name=' + params.name + '&freeSpaceCount=0' + '&zoneCoordinate=(' + params.x + ',' + params.y + '),(' + params.x2 + ',' + params.y2 + ')';
+    var body = 'name=' + params.name + '&freeSpaceCount=0' + '&zoneCoordinate=(' +
+        params.x + ',' + params.y + '),(' + params.x2 + ',' + params.y2 + ')';
     http.send(body);
     http.onreadystatechange = function () {
         if (http.readyState == 4) {
@@ -346,9 +353,10 @@ function saveZone(params) {
 
 function saveParking(params) {
     var http = new XMLHttpRequest();
-    http.open('POST', '/api/place', true);
+    http.open('PUT', '/api/place', true);
     http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    var body = 'area.id=' + params.areaID + '&isFree=' + params.isFree + '&coordinate=(' + params.x + ',' + params.y + ')';
+    var body = 'area.id=' + params.areaID + '&isFree=' + params.isFree + '&coordinate=(' +
+        params.x + ',' + params.y + ')';
     http.send(body);
     http.onreadystatechange = function () {
         if (http.readyState == 4) {
@@ -363,10 +371,11 @@ function saveParking(params) {
 }
 
 function editZone(params) {
+    console.log(params);
     var http = new XMLHttpRequest();
-    http.open('PUT', '/api/area/' + params.id, true);
+    http.open('POST', '/api/area/' + params.id, true);
     http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    var body = 'name=' + params.name;
+    var body = 'geoAddress.name=' + params.name + '&geoAddress.int_tag=';
     http.send(body);
     http.onreadystatechange = function () {
         if (http.readyState == 4) {
@@ -374,7 +383,8 @@ function editZone(params) {
                 var response = http.responseText;
                 var json = JSON.parse(response);
                 var zone = $('.zone[zone-id=' + json.id + ']');
-                zone.attr('zone-name', json.name);
+                console.log(json);
+                zone.attr('zone-address', json.geoAddress);
                 zone.click();
             }
         }
@@ -383,7 +393,7 @@ function editZone(params) {
 
 function editParking(params) {
     var http = new XMLHttpRequest();
-    http.open('PUT', '/api/place/' + params.id, true);
+    http.open('POST', '/api/place/' + params.id, true);
     http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     var body = 'isFree=' + params.isFree;
     http.send(body);

@@ -26,12 +26,12 @@ public class AreaController {
         return area;
     }
 
-    @PostMapping
+    @PutMapping
     public ParkingGeoArea createNewArea(ParkingGeoArea area){
         return service.saveArea(area);
     }
 
-    @PutMapping("{id}")
+    @PostMapping("{id}")
     public ParkingGeoArea updateAreaByID(
             @PathVariable("id") ParkingGeoArea areaDB,
             ParkingGeoArea area
@@ -39,7 +39,7 @@ public class AreaController {
         return service.updateArea(area, areaDB);
     }
 
-    @PutMapping
+    @PostMapping
     public ParkingGeoArea updateOrCreateArea(
             ParkingGeoArea area
     ){

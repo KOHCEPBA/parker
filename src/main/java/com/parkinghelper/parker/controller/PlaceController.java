@@ -33,7 +33,7 @@ public class PlaceController {
         return place;
     }
 
-    @PostMapping
+    @PutMapping
     public ResponseEntity saveNewPlace(ParkingPlace place) {
         try {
             return ResponseEntity.ok(service.savePlace(place));
@@ -43,7 +43,7 @@ public class PlaceController {
         }
     }
 
-    @PutMapping("{id}")
+    @PostMapping("{id}")
     public ResponseEntity updatePlaceByID(
             @PathVariable("id") ParkingPlace placeDB,
             ParkingPlace place
@@ -56,7 +56,7 @@ public class PlaceController {
         }
     }
 
-    @PutMapping
+    @PostMapping
     public ResponseEntity updateOrCreatePlace(
             ParkingPlace place
     ) {
