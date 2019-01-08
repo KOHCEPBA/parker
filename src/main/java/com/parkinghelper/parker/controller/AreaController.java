@@ -1,6 +1,6 @@
 package com.parkinghelper.parker.controller;
 
-import com.parkinghelper.parker.domain.ParkingArea;
+import com.parkinghelper.parker.domain.ParkingGeoArea;
 import com.parkinghelper.parker.service.ParkingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,37 +17,37 @@ public class AreaController {
     }
 
     @GetMapping
-    public Iterable<ParkingArea> getAllAreas(){
+    public Iterable<ParkingGeoArea> getAllAreas(){
         return service.getAllAreas();
     }
 
     @GetMapping("{id}")
-    public ParkingArea getAreaByID(@PathVariable("id") ParkingArea area){
+    public ParkingGeoArea getAreaByID(@PathVariable("id") ParkingGeoArea area){
         return area;
     }
 
     @PostMapping
-    public ParkingArea createNewArea(ParkingArea area){
+    public ParkingGeoArea createNewArea(ParkingGeoArea area){
         return service.saveArea(area);
     }
 
     @PutMapping("{id}")
-    public ParkingArea updateAreaByID(
-            @PathVariable("id") ParkingArea areaDB,
-            ParkingArea area
+    public ParkingGeoArea updateAreaByID(
+            @PathVariable("id") ParkingGeoArea areaDB,
+            ParkingGeoArea area
     ){
         return service.updateArea(area, areaDB);
     }
 
     @PutMapping
-    public ParkingArea updateOrCreateArea(
-            ParkingArea area
+    public ParkingGeoArea updateOrCreateArea(
+            ParkingGeoArea area
     ){
         return service.updateArea(area);
     }
 
     @DeleteMapping("{id}")
-    public void deletePlaceByID(@PathVariable("id") ParkingArea area){
+    public void deletePlaceByID(@PathVariable("id") ParkingGeoArea area){
         service.deleteArea(area);
     }
 
