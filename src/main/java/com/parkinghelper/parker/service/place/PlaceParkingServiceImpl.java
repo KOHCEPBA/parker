@@ -1,10 +1,10 @@
-package com.parkinghelper.parker.service;
+package com.parkinghelper.parker.service.place;
 
 import com.parkinghelper.parker.domain.ParkingGeoArea;
 import com.parkinghelper.parker.domain.ParkingPlace;
 import org.postgresql.geometric.PGpoint;
 
-public interface ParkingServiceImpl {
+public interface PlaceParkingServiceImpl {
 
     Iterable<ParkingPlace> getAllPlaces();
 
@@ -14,13 +14,4 @@ public interface ParkingServiceImpl {
     ParkingPlace savePlace(ParkingPlace place);
 
     void deletePlace(ParkingPlace place);
-
-    Iterable<ParkingGeoArea> getAllAreas();
-
-    ParkingGeoArea updateArea(ParkingGeoArea areaNew, ParkingGeoArea areaOld);
-    ParkingGeoArea updateArea(ParkingGeoArea area);
-
-    ParkingGeoArea saveArea(ParkingGeoArea area);
-
-    void deleteArea(ParkingGeoArea area);
 }

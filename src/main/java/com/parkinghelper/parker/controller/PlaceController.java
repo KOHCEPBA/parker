@@ -2,7 +2,7 @@ package com.parkinghelper.parker.controller;
 
 import com.parkinghelper.parker.domain.AreaGeoAddress;
 import com.parkinghelper.parker.domain.ParkingPlace;
-import com.parkinghelper.parker.service.ParkingService;
+import com.parkinghelper.parker.service.place.PlaceParkingService;
 import com.parkinghelper.parker.service.find.FindParkingService;
 import org.postgresql.geometric.PGpoint;
 import org.springframework.http.HttpStatus;
@@ -15,17 +15,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/place")
 public class PlaceController {
 
-    private final ParkingService service;
+    private final PlaceParkingService placeService;
     private final FindParkingService findService;
 
-    public PlaceController(ParkingService service, FindParkingService findService) {
-        this.service = service;
+    public PlaceController(PlaceParkingService placeService, FindParkingService findService) {
+        this.placeService = placeService;
         this.findService = findService;
     }
 
     @GetMapping
     public Iterable<ParkingPlace> getAllPlaces() {
-        return service.getAllPlaces();
+        return placeService.getAllPlaces();
     }
 
     @GetMapping("{id}")
@@ -36,7 +36,7 @@ public class PlaceController {
     @PutMapping
     public ResponseEntity saveNewPlace(ParkingPlace place) {
         try {
-            return ResponseEntity.ok(service.savePlace(place));
+            return ResponseEntity.ok(placeService.savePlace(place));
         }catch (IllegalArgumentException e)
         {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -49,7 +49,7 @@ public class PlaceController {
             ParkingPlace place
     ) {
         try {
-            return ResponseEntity.ok(service.updatePlace(place, placeDB));
+            return ResponseEntity.ok(placeService.updatePlace(place, placeDB));
         }catch (IllegalArgumentException e)
         {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -61,7 +61,7 @@ public class PlaceController {
             ParkingPlace place
     ) {
         try {
-            return ResponseEntity.ok(service.updatePlace(place));
+            return ResponseEntity.ok(placeService.updatePlace(place));
         }catch (IllegalArgumentException e)
         {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -70,7 +70,7 @@ public class PlaceController {
 
     @DeleteMapping("{id}")
     public void deletePlaceByID(@PathVariable("id") ParkingPlace place) {
-        service.deletePlace(place);
+        placeService.deletePlace(place);
     }
 
     @PostMapping("nearest_free_spaces")

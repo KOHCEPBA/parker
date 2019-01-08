@@ -1,4 +1,4 @@
-package com.parkinghelper.parker.service;
+package com.parkinghelper.parker.service.place;
 
 import com.parkinghelper.parker.CopyProperties;
 import com.parkinghelper.parker.domain.ParkingGeoArea;
@@ -10,12 +10,12 @@ import org.postgresql.geometric.PGpoint;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ParkingService implements ParkingServiceImpl {
+public class PlaceParkingService implements PlaceParkingServiceImpl {
 
     private final ParkingPlaceRepository places;
     private final ParkingAreaRepository areas;
 
-    public ParkingService(ParkingPlaceRepository places, ParkingAreaRepository areas) {
+    public PlaceParkingService(ParkingPlaceRepository places, ParkingAreaRepository areas) {
         this.places = places;
         this.areas = areas;
     }
@@ -70,38 +70,6 @@ public class ParkingService implements ParkingServiceImpl {
         places.delete(place);
     }
 
-    @Override
-    public Iterable<ParkingGeoArea> getAllAreas() {
-        return areas.findAll();
-    }
-
-    @Override
-    public ParkingGeoArea updateArea(ParkingGeoArea areaNew, ParkingGeoArea areaOld) {
-        CopyProperties.copyProperties(areaNew, areaOld, "id", "null"); //Копирование полей из нового в старый
-
-        return areas.saveAndFlush(areaOld);
-    }
-
-    @Override
-    public ParkingGeoArea updateArea(ParkingGeoArea area) {
-
-        ParkingGeoArea areaOld = areas.getOne(area.getId());
-
-        return
-                (areaOld != null) ?
-                        updateArea(area, areaOld) :
-                        saveArea(area);
-    }
-
-    @Override
-    public ParkingGeoArea saveArea(ParkingGeoArea area) {
-        return areas.saveAndFlush(area);
-    }
-
-    @Override
-    public void deleteArea(ParkingGeoArea area) {
-        areas.delete(area);
-    }
 
     private boolean CheckContainsPoint(Zone box, PGpoint point) {
         if (point == null || box == null) return false;
