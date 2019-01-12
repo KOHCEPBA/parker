@@ -13,10 +13,18 @@ public class AreaGeoAddress {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @JoinColumn(name = "name")
-    private String name;
+    @JoinColumn(name = "country")
+    private String country;
 
-    @JoinColumn(name = "int_tag")
-    private Integer int_tag;
+    @JoinColumn(name = "region")
+    private String region;
 
+    @JoinColumn(name = "city")
+    private String city;
+
+    @JoinColumn(name = "street")
+    private String street;
+
+    @JoinColumn(name = "number")
+    private Integer number;
 }

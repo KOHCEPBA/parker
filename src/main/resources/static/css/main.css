@@ -28,7 +28,7 @@ body {
 
 .parking {
     transition: .5s;
-    border: 2px solid transparent;
+    border: 5px solid transparent;
 }
 
 .parking:hover {

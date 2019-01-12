@@ -14,6 +14,7 @@ var searchModeByZone = false;
 
 var aboutParkingV;
 var zoneNameBuff;
+var zoneNumberBuff;
 var coordsBuff;
 
 $(document).ready(function () {
@@ -75,6 +76,7 @@ $(document).on('touchstart click', '#zones_place', function (e) {
         coordsBuff = getMousePos(this, e);
 
         $('#editModalZoneName').val("Zone");
+        $('#editModalZoneNumber').val(0);
         $('.sizeZone').show();
 
         $('#editModalZoneXSize').val(zoneSize);
@@ -127,8 +129,11 @@ $(document).on('touchstart click', '#editButton', function (e) {
     var k = $('.selected');
     if (k.hasClass('zone')) {
         isEditZone = true;
-        zoneNameBuff = k.attr('zone-name');
+        zoneNameBuff = k.attr('zone-address').name;
+        zoneNameBuff = k.attr('zone-address').name;
+        zoneNumberBuff = k.attr('zone-address').number;
         $('#editModalZoneName').val(zoneNameBuff);
+        $('#editModalZoneNumber').val(zoneNumberBuff);
         $('.sizeZone').hide();
         $('#editModalZone').modal('show');
     } else {
@@ -140,34 +145,69 @@ $(document).on('touchstart click', '#editButton', function (e) {
 
 $(document).on('touchstart click', '#saveZone', function (e) {
     if (!isEditZone) {
-        var zonename = $('#editModalZoneName').val();
+        var zoneCountry = $('#editModalZoneCountry').val();
+        var zoneRegion = $('#editModalZoneRegion').val();
+        var zoneCity = $('#editModalZoneCity').val();
+        var zoneStreet = $('#editModalZoneStreet').val();
+        var zoneNumber = $('#editModalZoneNumber').val();
         var zoneSizeX = $('#editModalZoneXSize').val();
         var zoneSizeY = $('#editModalZoneYSize').val();
         var error = false;
 
-        $('#editModalZoneName').removeClass('error');
+        $('#editModalZoneCountry').removeClass('error');
+        $('#editModalZoneRegion').removeClass('error');
+        $('#editModalZoneCity').removeClass('error');
+        $('#editModalZoneStreet').removeClass('error');
+        $('#editModalZoneNumber').removeClass('error');
         $('#editModalZoneXSize').removeClass('error');
         $('#editModalZoneYSize').removeClass('error');
 
 
-        if(zonename == '' || zonename == undefined) {
+        if (zoneCountry == '' || zoneCountry == undefined) {
             error = true;
-            $('#editModalZoneName').addClass('error');
+            $('#editModalZoneCountry').addClass('error');
         }
 
-        if(zoneSizeX == '' || zoneSizeX == undefined) {
+        if (zoneRegion == '' || zoneRegion == undefined) {
+            error = true;
+            $('#editModalZoneRegion').addClass('error');
+        }
+
+        if (zoneCity == '' || zoneCity == undefined) {
+            error = true;
+            $('#editModalZoneCity').addClass('error');
+        }
+
+        if (zoneStreet == '' || zoneStreet == undefined) {
+            error = true;
+            $('#editModalZoneStreet').addClass('error');
+        }
+
+        if (zoneNumber == '' || zoneNumber == undefined) {
+            error = true;
+            $('#editModalZoneNumber').addClass('error');
+        }
+
+        if (zoneSizeX == '' || zoneSizeX == undefined) {
             error = true;
             $('#editModalZoneXSize').addClass('error');
         }
 
-        if(zoneSizeY == '' || zoneSizeY == undefined) {
+        if (zoneSizeY == '' || zoneSizeY == undefined) {
             error = true;
-            $('#editModalZoneySize').addClass('error');
+            $('#editModalZoneYSize').addClass('error');
         }
 
         if (!error) {
+            var addr = {
+                country: zoneCountry,
+                region: zoneRegion,
+                city: zoneCity,
+                street: zoneStreet,
+                number: zoneNumber
+            };
             var aboutZone = {
-                name: zonename,
+                address: addr,
                 areaID: 0,
                 x: coordsBuff.x,
                 y: coordsBuff.y,
@@ -183,18 +223,27 @@ $(document).on('touchstart click', '#saveZone', function (e) {
         }
     } else {
         $('#editModalZoneName').removeClass('error');
+        $('#editModalZoneNumber').removeClass('error');
         var newName = $('#editModalZoneName').val();
-        if(newName == '' || newName == undefined) {
+        var newNumber = $('#editModalZoneNumber').val();
+        if (newName == '' || newName == undefined) {
             $('#editModalZoneName').addClass('error');
             return;
-        } else {
-            if(zoneNameBuff != newName){
-                var aboutZone = {
-                    id: $('.zone.selected').attr('zone-id'),
-                    name: newName
-                };
-                editZone(aboutZone);
-            }
+        }
+        if (newNumber == '' || newNumber == undefined) {
+            $('#editModalZoneNumber').addClass('error');
+            return;
+        }
+        if (zoneNameBuff != newName || zoneNumberBuff != newNumber) {
+            var addr = {
+                name: newName,
+                number: newNumber
+            };
+            var aboutZone = {
+                id: $('.zone.selected').attr('zone-id'),
+                address: addr
+            };
+            editZone(aboutZone);
         }
         isEditZone = false;
     }
@@ -264,6 +313,7 @@ function getList() {
                     }
 
                     var aboutZone = {
+                        places: v.places,
                         geoAddress: v.geoAddress,
                         areaID: v.id,
                         x: x,
@@ -274,29 +324,18 @@ function getList() {
                         sizeY: parseFloat(y2) - parseFloat(y)
                     };
                     drawZone(aboutZone);
-                });
 
-                http.open('GET', "/api/place", true);
-                http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                http.send(null);
-                http.onreadystatechange = function () {
-                    if (http.readyState == 4) {
-                        if (http.status == 200) {
-                            var response = http.responseText;
-                            var json = JSON.parse(response);
-                            $.each(json, function (k, v) {
-                                var aboutPlace = {
-                                    id: v.id,
-                                    areaID: v.area.id,
-                                    isFree: v.isFree,
-                                    x: v.coordinate.x,
-                                    y: v.coordinate.y
-                                };
-                                drawParking(aboutPlace);
-                            });
-                        }
-                    }
-                };
+                    $.each(aboutZone.places, function (k, v) {
+                        var aboutPlace = {
+                            id: v.id,
+                            areaID: aboutZone.areaID,
+                            isFree: v.isFree,
+                            x: v.coordinate.x,
+                            y: v.coordinate.y
+                        };
+                        drawParking(aboutPlace);
+                    });
+                });
             }
         }
     };
@@ -304,7 +343,7 @@ function getList() {
 
 function drawZone(params) {
     $("#zones_place").append('<div class="zone" zone-id="' + params.areaID + '" zone-address="' +
-        params.geoAddress + '" id="zone-' + params.areaID + '" style="width: ' +
+        params.geoAddress + '"zone-places="' + params.places + '" id="zone-' + params.areaID + '" style="width: ' +
         Math.abs(params.sizeX) + 'px; height: ' + Math.abs(params.sizeY) + 'px; margin-left: ' +
         params.x + 'px; margin-top: ' + params.y + 'px;"></div>');
 }
@@ -336,7 +375,9 @@ function saveZone(params) {
     var http = new XMLHttpRequest();
     http.open('PUT', '/api/area', true);
     http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    var body = 'name=' + params.name + '&freeSpaceCount=0' + '&zoneCoordinate=(' +
+    var body = 'geoAddress.country=' + params.address.country + '&geoAddress.region=' + params.address.region +
+        '&geoAddress.city=' + params.address.city + '&geoAddress.street=' + params.address.street +
+        '&geoAddress.number=' + params.address.number + '&freeSpaceCount=0' + '&zoneCoordinate=(' +
         params.x + ',' + params.y + '),(' + params.x2 + ',' + params.y2 + ')';
     http.send(body);
     http.onreadystatechange = function () {
@@ -371,11 +412,10 @@ function saveParking(params) {
 }
 
 function editZone(params) {
-    console.log(params);
     var http = new XMLHttpRequest();
     http.open('POST', '/api/area/' + params.id, true);
     http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    var body = 'geoAddress.name=' + params.name + '&geoAddress.int_tag=';
+    var body = 'geoAddress.name=' + params.address.name + '&geoAddress.int_tag=' + params.address.number;
     http.send(body);
     http.onreadystatechange = function () {
         if (http.readyState == 4) {
@@ -385,6 +425,7 @@ function editZone(params) {
                 var zone = $('.zone[zone-id=' + json.id + ']');
                 console.log(json);
                 zone.attr('zone-address', json.geoAddress);
+                console.log(zone);
                 zone.click();
             }
         }
