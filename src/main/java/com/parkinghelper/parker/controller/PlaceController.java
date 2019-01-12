@@ -2,8 +2,8 @@ package com.parkinghelper.parker.controller;
 
 import com.parkinghelper.parker.domain.AreaGeoAddress;
 import com.parkinghelper.parker.domain.ParkingPlace;
-import com.parkinghelper.parker.service.place.PlaceParkingService;
 import com.parkinghelper.parker.service.find.FindParkingService;
+import com.parkinghelper.parker.service.place.PlaceParkingService;
 import org.postgresql.geometric.PGpoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -79,8 +79,14 @@ public class PlaceController {
     }
 
     @PostMapping("nearest_free_spaces/{limit}")
-    public Iterable<ParkingPlace> getNearestFreeSpaces(@RequestParam PGpoint coordinate, @PathVariable("limit") Integer limit) {
-        return findService.findPlacesNearCoordinate(coordinate, limit);
+    public ResponseEntity getNearestFreeSpaces(@RequestParam PGpoint coordinate, @PathVariable("limit") Integer limit) {
+        try {
+            return ResponseEntity.ok(findService.findPlacesNearCoordinate(coordinate, limit));
+        }catch (IllegalArgumentException e)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
     }
 
     @PostMapping("area_places/address")
