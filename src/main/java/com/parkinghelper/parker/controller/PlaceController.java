@@ -33,17 +33,17 @@ public class PlaceController {
         return place;
     }
 
-    @PutMapping
+    @PostMapping
     public ResponseEntity saveNewPlace(ParkingPlace place) {
         try {
-            return ResponseEntity.ok(placeService.savePlace(place));
+            return ResponseEntity.status(HttpStatus.CREATED).body(placeService.savePlace(place));
         }catch (IllegalArgumentException e)
         {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
-    @PostMapping("{id}")
+    @PutMapping("{id}")
     public ResponseEntity updatePlaceByID(
             @PathVariable("id") ParkingPlace placeDB,
             ParkingPlace place
@@ -56,7 +56,7 @@ public class PlaceController {
         }
     }
 
-    @PostMapping
+    @PutMapping
     public ResponseEntity updateOrCreatePlace(
             ParkingPlace place
     ) {

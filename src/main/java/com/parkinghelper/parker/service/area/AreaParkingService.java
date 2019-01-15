@@ -28,8 +28,9 @@ public class AreaParkingService implements AreaParkingServiceImpl {
 
     @Override
     public ParkingGeoArea updateArea(ParkingGeoArea area) {
-
-        ParkingGeoArea areaOld = areas.getOne(area.getId());
+        ParkingGeoArea areaOld = null;
+        if (area.getId() != null)
+        areaOld = areas.getOne(area.getId());
 
         return (areaOld != null) ?
                 updateArea(area, areaOld) :

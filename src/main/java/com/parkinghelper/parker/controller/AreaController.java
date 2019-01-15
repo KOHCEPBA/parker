@@ -5,6 +5,7 @@ import com.parkinghelper.parker.domain.ParkingGeoArea;
 import com.parkinghelper.parker.domain.requestTypes.FieldProperties;
 import com.parkinghelper.parker.service.area.AreaParkingService;
 import com.parkinghelper.parker.service.find.FindParkingService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -32,24 +33,28 @@ public class AreaController {
         return area;
     }
 
-    @PutMapping
-    public ParkingGeoArea createNewArea(ParkingGeoArea area) {
-        return areaService.saveArea(area);
+    @PostMapping
+    public ResponseEntity createNewArea(ParkingGeoArea area) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(areaService.saveArea(area));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
-    @PostMapping("{id}")
-    public ParkingGeoArea updateAreaByID(
+    @PutMapping("{id}")
+    public ResponseEntity updateAreaByID(
             @PathVariable("id") ParkingGeoArea areaDB,
             ParkingGeoArea area
     ) {
-        return areaService.updateArea(area, areaDB);
+        return ResponseEntity.ok(areaService.updateArea(area, areaDB));
     }
 
-    @PostMapping
-    public ParkingGeoArea updateOrCreateArea(
+    @PutMapping
+    public ResponseEntity updateOrCreateArea(
             ParkingGeoArea area
     ) {
-        return areaService.updateArea(area);
+        return ResponseEntity.ok(areaService.updateArea(area));
     }
 
     @DeleteMapping("{id}")
@@ -64,7 +69,7 @@ public class AreaController {
             FieldProperties.copyFields(address, fieldProperties);
             return ResponseEntity.ok(findService.findByAddress(address));
         } catch (NoSuchFieldException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body("No such field '" + e.getMessage() + "'");
         }
     }
 }

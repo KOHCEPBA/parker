@@ -373,7 +373,7 @@ function getMousePos(div, e) {
 
 function saveZone(params) {
     var http = new XMLHttpRequest();
-    http.open('PUT', '/api/area', true);
+    http.open('POST', '/api/area', true);
     http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     var body = 'geoAddress.country=' + params.address.country + '&geoAddress.region=' + params.address.region +
         '&geoAddress.city=' + params.address.city + '&geoAddress.street=' + params.address.street +
@@ -382,7 +382,7 @@ function saveZone(params) {
     http.send(body);
     http.onreadystatechange = function () {
         if (http.readyState == 4) {
-            if (http.status == 200) {
+            if (http.status == 201) {
                 var response = http.responseText;
                 var json = JSON.parse(response);
                 params.areaID = json.id;
@@ -394,14 +394,14 @@ function saveZone(params) {
 
 function saveParking(params) {
     var http = new XMLHttpRequest();
-    http.open('PUT', '/api/place', true);
+    http.open('POST', '/api/place', true);
     http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     var body = 'area.id=' + params.areaID + '&isFree=' + params.isFree + '&coordinate=(' +
         params.x + ',' + params.y + ')';
     http.send(body);
     http.onreadystatechange = function () {
         if (http.readyState == 4) {
-            if (http.status == 200) {
+            if (http.status == 201) {
                 var response = http.responseText;
                 var json = JSON.parse(response);
                 params.id = json.id;
@@ -413,7 +413,7 @@ function saveParking(params) {
 
 function editZone(params) {
     var http = new XMLHttpRequest();
-    http.open('POST', '/api/area/' + params.id, true);
+    http.open('PUT', '/api/area/' + params.id, true);
     http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     var body = 'geoAddress.name=' + params.address.name + '&geoAddress.int_tag=' + params.address.number;
     http.send(body);
@@ -434,7 +434,7 @@ function editZone(params) {
 
 function editParking(params) {
     var http = new XMLHttpRequest();
-    http.open('POST', '/api/place/' + params.id, true);
+    http.open('PUT', '/api/place/' + params.id, true);
     http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
     var body = 'isFree=' + params.isFree;
     http.send(body);
