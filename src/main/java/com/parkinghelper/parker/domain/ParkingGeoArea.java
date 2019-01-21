@@ -2,10 +2,10 @@ package com.parkinghelper.parker.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.parkinghelper.parker.domain.types.Zone;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Type;
+import org.postgresql.geometric.PGpolygon;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -33,11 +33,11 @@ public class ParkingGeoArea {
     private Integer freeSpaceCount;
 
     @NotNull
-    @Column(name = "zone_coordinate", columnDefinition = "box")
-    @Type(type = "com.parkinghelper.parker.domain.types.BoxUserType")
+    @Column(name = "polygon_coordinates", columnDefinition = "polygon")
+    @Type(type = "com.parkinghelper.parker.domain.types.PolygonUserType")
     @Getter
     @Setter
-    private Zone zoneCoordinate;
+    private PGpolygon polygonCoordinate;
 
     @OneToMany(mappedBy = "area",
             cascade = CascadeType.REMOVE,

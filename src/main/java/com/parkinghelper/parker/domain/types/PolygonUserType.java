@@ -3,6 +3,7 @@ package com.parkinghelper.parker.domain.types;
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.usertype.UserType;
+import org.postgresql.geometric.PGpolygon;
 
 import java.io.Serializable;
 import java.sql.PreparedStatement;
@@ -12,7 +13,7 @@ import java.sql.Types;
 
 
 //Hibernate custom type
-public class BoxUserType implements UserType {
+public class PolygonUserType implements UserType {
 
     @Override
     public Object nullSafeGet(ResultSet resultSet, String[] names, SharedSessionContractImplementor sharedSessionContractImplementor, Object owner)
@@ -21,8 +22,8 @@ public class BoxUserType implements UserType {
         if (resultSet.wasNull()) {
             return null;
         }
-        final Zone box = new Zone(resultSet.getObject(names[0]).toString());
-        return box;
+        final PGpolygon polygon = new PGpolygon(resultSet.getObject(names[0]).toString());
+        return polygon;
     }
 
     @Override
@@ -42,7 +43,7 @@ public class BoxUserType implements UserType {
     @SuppressWarnings("rawtypes")
     @Override
     public Class returnedClass() {
-        return Zone.class;
+        return PGpolygon.class;
     }
 
     @Override

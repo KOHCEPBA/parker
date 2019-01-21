@@ -1,9 +1,13 @@
 package com.parkinghelper.parker.repositories;
 
 import com.parkinghelper.parker.domain.AreaGeoAddress;
+import com.parkinghelper.parker.domain.ParkingGeoArea;
 import com.parkinghelper.parker.domain.ParkingPlace;
+import org.postgresql.geometric.PGpoint;
+import org.postgresql.geometric.PGpolygon;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -16,5 +20,8 @@ public interface ParkingPlaceRepository extends JpaRepository<ParkingPlace,Long>
     Iterable<ParkingPlace> findPlacesOrderByDistance(Double x, Double y);
 
     Iterable<ParkingPlace> findAllPlacesByAreaGeoAddressInAndIsFreeTrueOrderById(Iterable<AreaGeoAddress> geoAddressArea);
+
+    @Query(value = "SELECT polygon((:area)) @> point((:place)) from parking_area as areas", nativeQuery = true)
+    Boolean checkContain(@Param(value = "area") String polygon, @Param("place") String point);
 
 }
