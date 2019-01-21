@@ -9,6 +9,8 @@ public interface FindParkingServiceImpl {
 
     Iterable<ParkingPlace> findPlacesNearCoordinate(PGpoint coordinate, Integer limit);
 
+    Iterable<ParkingPlace> findPlacesNearCoordinate(PGpoint coordinate);
+
     Iterable<ParkingPlace> findFreePlacesByAreaAddress(AreaGeoAddress name);
 
     Iterable<ParkingGeoArea> findByAddress(AreaGeoAddress address);

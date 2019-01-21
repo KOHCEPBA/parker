@@ -27,9 +27,12 @@ public class FindParkingService implements FindParkingServiceImpl {
     public Iterable<ParkingPlace> findPlacesNearCoordinate(PGpoint coordinate, Integer limit) {
         if (limit <= 0) throw new IllegalArgumentException("limit must be greater than zero");
 
-        Iterable<ParkingPlace> pls = places.findPlacesOrderByDistanceLimited(coordinate.x, coordinate.y, limit);
+        return places.findPlacesOrderByDistanceLimited(coordinate.x, coordinate.y, limit);
+    }
 
-        return pls;
+    @Override
+    public Iterable<ParkingPlace> findPlacesNearCoordinate(PGpoint coordinate) {
+        return places.findPlacesOrderByDistance(coordinate.x, coordinate.y);
     }
 
     @Override

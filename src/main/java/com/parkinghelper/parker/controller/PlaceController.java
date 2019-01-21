@@ -75,7 +75,7 @@ public class PlaceController {
 
     @PostMapping("nearest_free_spaces")
     public Iterable<ParkingPlace> getNearestFreeSpaces(@RequestParam PGpoint coordinate) {
-        return findService.findPlacesNearCoordinate(coordinate, 5);
+        return findService.findPlacesNearCoordinate(coordinate);
     }
 
     @PostMapping("nearest_free_spaces/{limit}")
