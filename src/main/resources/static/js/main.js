@@ -1,7 +1,6 @@
-var searchLimit = 1;
-var searchLimitBuff = searchLimit;
-
 var deletePoly = false;
+var searchPlaceIndex = 0;
+var searchContainer;
 
 var map;
 var lastCoords;
@@ -29,10 +28,10 @@ $(document).on('touchstart click', '#searchByAddressButton', function () {
     return false;
 });
 
-$(document).on('touchstart click', '#searchParkingsByZoneButton', function () {
-    searchPlaces();
-    return false;
-});
+// $(document).on('touchstart click', '#searchParkingsByZoneButton', function () {
+//     searchPlaces();
+//     return false;
+// });
 
 $(document).on('touchstart click', '#searchParkingsButton', function () {
     searchPlaces();
@@ -41,6 +40,15 @@ $(document).on('touchstart click', '#searchParkingsButton', function () {
 
 $(document).on('touchstart click', '#clearParkingsButton', function () {
     clearFoundPlaces();
+    return false;
+});
+
+$(document).on('touchstart click', '#prevBtn', function () {
+    prevPlace();
+    return false;
+});
+$(document).on('touchstart click', '#nextBtn', function () {
+    nextPlace();
     return false;
 });
 
@@ -99,7 +107,7 @@ $(document).on('touchstart click', '#addParking', function () {
         var c = lastCoords.geometry.getCoordinates();
         var params = {
             areaID: lastPoly.properties.get("areaID"),
-            isFree: true,
+            isFree: $('#editModalParkingState').val() == "true",
             coords: c
         };
         saveParking(params);
@@ -209,10 +217,10 @@ $(document).on('touchstart click', '#saveParking', function (e) {
 
 $(document).on('touchstart click', '#searchZone', function (e) {
 
-    var addressTamplate = [];
+    var addressTemplate = [];
 
     if ($('#searchModalZoneCountry').val() != '') {
-        addressTamplate.push({
+        addressTemplate.push({
             "field": "country",
             "conformityMode": $('#searchModalZoneCountry_select').val(),
             "value": $('#searchModalZoneCountry').val()
@@ -220,7 +228,7 @@ $(document).on('touchstart click', '#searchZone', function (e) {
     }
 
     if ($('#searchModalZoneRegion').val() != '') {
-        addressTamplate.push({
+        addressTemplate.push({
             "field": "region",
             "conformityMode": $('#searchModalZoneRegion_select').val(),
             "value": $('#searchModalZoneRegion').val()
@@ -228,7 +236,7 @@ $(document).on('touchstart click', '#searchZone', function (e) {
     }
 
     if ($('#searchModalZoneCity').val() != '') {
-        addressTamplate.push({
+        addressTemplate.push({
             "field": "city",
             "conformityMode": $('#searchModalZoneCity_select').val(),
             "value": $('#searchModalZoneCity').val()
@@ -236,7 +244,7 @@ $(document).on('touchstart click', '#searchZone', function (e) {
     }
 
     if ($('#searchModalZoneStreet').val() != '') {
-        addressTamplate.push({
+        addressTemplate.push({
             "field": "street",
             "conformityMode": $('#searchModalZoneStreet_select').val(),
             "value": $('#searchModalZoneStreet').val()
@@ -244,7 +252,7 @@ $(document).on('touchstart click', '#searchZone', function (e) {
     }
 
     if ($('#searchModalZoneNumber').val() != '') {
-        addressTamplate.push({
+        addressTemplate.push({
             "field": "number",
             "conformityMode": $('#searchModalZoneNumber_select').val(),
             "value": $('#searchModalZoneNumber').val()
@@ -252,9 +260,9 @@ $(document).on('touchstart click', '#searchZone', function (e) {
     }
 
     var http = new XMLHttpRequest();
-    http.open('POST', "/api/area/addressTamplate", true);
+    http.open('POST', "/api/area/addressTemplate", true);
     http.setRequestHeader('Content-Type', 'application/json');
-    http.send(JSON.stringify(addressTamplate));
+    http.send(JSON.stringify(addressTemplate));
     http.onreadystatechange = function () {
         if (http.readyState == 4) {
             if (http.status == 200) {
@@ -434,7 +442,7 @@ function searchPlaces() {
         clearFoundPlaces();
         var coords = lastCoords.geometry.getCoordinates();
         var http = new XMLHttpRequest();
-        http.open('POST', '/api/place/nearest_free_spaces/' + searchLimitBuff, true);
+        http.open('POST', '/api/place/nearest_free_spaces/', true);
         http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         var body = 'coordinate=(' + coords[0] + ', ' + coords[1] + ')';
         http.send(body);
@@ -446,24 +454,43 @@ function searchPlaces() {
                     if (json.length == 0) {
                         alert('Места не найдены');
                     } else {
-                        var result = ymaps.geoQuery(map.geoObjects);
-                        var r = result.search('geometry.type = "Point"');
-                        r.then(function () {
-                            $.each(json, function (k, v) {
-                                var r2 = r.search('properties.pointID = ' + v.id).search('properties.isFree = true');
-                                r2.then(function () {
-                                    r2.setOptions({
-                                        preset: 'islands#blueParkingIcon'
-                                    });
-                                });
-                            });
-                        });
-                        map.setCenter(coords);
+                        searchContainer = json;
+                        selectPoint();
+                        $('#prevBtn').show();
+                        $('#nextBtn').show();
                     }
                 }
             }
         };
     }
+}
+
+function nextPlace() {
+    if (searchPlaceIndex < searchContainer.length){
+        searchPlaceIndex++;
+        selectPoint();
+    }
+}
+
+function prevPlace() {
+    if (searchPlaceIndex > 0){
+        searchPlaceIndex--;
+        selectPoint();
+    }
+}
+
+function selectPoint() {
+    var result = ymaps.geoQuery(map.geoObjects);
+    var r = result.search('geometry.type = "Point"');
+    r.then(function () {
+        var r2 = r.search('properties.pointID = ' + searchContainer[searchPlaceIndex].id);
+        r2.then(function () {
+            r2.setOptions({
+                preset: 'islands#blueParkingIcon'
+            });
+        });
+    });
+    map.setCenter([searchContainer[searchPlaceIndex].coordinate.x, searchContainer[searchPlaceIndex].coordinate.y]);
 }
 
 function searchPlacesByName(name) {
@@ -493,6 +520,9 @@ function searchPlacesByName(name) {
 function clearFoundPlaces() {
     var result = ymaps.geoQuery(map.geoObjects);
     var r = result.search('geometry.type = "Point"');
+    $('#prevBtn').hide();
+    $('#nextBtn').hide();
+    searchPlaceIndex = 0;
     r.then(function () {
         var r2 = r.search('properties.pointID != null').search('properties.isFree = true');
         r2.then(function () {
