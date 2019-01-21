@@ -1,162 +1,249 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+    <title>Simple map</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Parking system</title>
-
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/main.css">
 </head>
 
 <body>
-
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-    <a class="navbar-brand" href="#">Parking system</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
-            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="/">Home</a>
-            </li>
-        </ul>
-    </div>
-</nav>
-
-
 <main role="main" class="container">
-    <div class="jumbotron">
-        <h1>Parking</h1>
-
-        <div class="btn-toolbar justify-content-between" role="toolbar">
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-light" id="addZone">Добавить зону</button>
-                <button type="button" class="btn btn-light" id="addParking">Добавить парковочное место</button>
-            </div>
-
-            <div class="btn-group" role="group">
-                <div class="dropdown">
-                    <button class="btn btn-light dropdown-toggle" type="button" id="parkingsButton"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Парковка
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="parkingsButton">
-                        <a class="dropdown-item" href="#" id="searchParkingsButton">Найти места (По точке на карте)</a>
-                        <a class="dropdown-item" href="#" id="searchParkingsByZoneButton">Найти места (В зоне)</a>
-                        <a class="dropdown-item" href="#" id="clearParkingsButton">Очистить найденные</a>
-                    </div>
+    <h1>Parking</h1>
+    <div class="btn-toolbar justify-content-between" role="toolbar">
+        <div class="btn-group" role="group">
+            <div class="dropdown">
+                <button class="btn btn-light dropdown-toggle" type="button" id="zonesButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Парковочные зоны
+                </button>
+                <div class="dropdown-menu" aria-labelledby="zonesButton">
+                    <button type="button" class="btn btn-light" id="addZone">Добавить зону</button>
+                    <button type="button" class="btn btn-light" id="deleteZone">Удалить зону</button>
                 </div>
             </div>
 
-            <div class="btn-group" role="group">
-                <div class="dropdown" id="actionsDropdown" style="display: none;">
-                    <button class="btn btn-light dropdown-toggle" type="button" id="actionsButton"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Действия
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="actionsButton">
-                        <a class="dropdown-item" href="#" id="editButton">Изменить</a>
-                        <a class="dropdown-item" href="#" id="deleteButton">Удалить</a>
-                    </div>
+            <button type="button" class="btn btn-light" id="saveZoneH" style="display: none;">Сохранить</button>
+            <button type="button" class="btn btn-light" id="cancelZoneH" style="display: none;">Отменить</button>
+
+            <button type="button" class="btn btn-light" id="addParking">Добавить парковочное место</button>
+        </div>
+
+        <div class="btn-group" role="group">
+            <div class="dropdown">
+                <button class="btn btn-light dropdown-toggle" type="button" id="parkingsButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Парковка
+                </button>
+                <div class="dropdown-menu" aria-labelledby="parkingsButton">
+                    <a class="dropdown-item" href="#" id="searchByAddressButton">Поиск по адресу</a>
+                    <a class="dropdown-item" href="#" id="searchParkingsButton">Найти места (По точке на карте)</a>
+                    <a class="dropdown-item" href="#" id="searchParkingsByZoneButton">Найти места (В зоне)</a>
+                    <a class="dropdown-item" href="#" id="clearParkingsButton">Очистить найденные</a>
                 </div>
             </div>
         </div>
 
-        <div class="lead" id="zones_place"
-             style="margin: 0 auto; text-align: center; border:1px solid #515151;position: relative; width: 100%; height: 700px;"></div>
+        <div class="btn-group" role="group">
+            <div class="dropdown" id="actionsDropdown" style="display: none;">
+                <button class="btn btn-light dropdown-toggle" type="button" id="actionsButton"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Действия
+                </button>
+                <div class="dropdown-menu" aria-labelledby="actionsButton">
+                    <a class="dropdown-item" href="#" id="editButton">Изменить</a>
+                    <a class="dropdown-item" href="#" id="deleteButton">Удалить</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="lead" id="map"
+         style="margin: 0 auto; text-align: center; border:1px solid #515151;position: relative; width: 100%; height: 700px;"></div>
+
+
+    <div class="modal fade" id="searchModalZone" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false"
+         data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchModalZoneTitle">Поиск</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="editModalZoneCountry">Страна</label>
+                            <div class="input-group">
+                                <input class="form-control" id="searchModalZoneCountry">
+                                <select id="searchModalZoneCountry_select" class="custom-select">
+                                    <option value="any">Любое</option>
+                                    <option value="equals">Совпадает</option>
+                                    <option value="contain">Содержит</option>
+                                    <option value="startWith">Начинается с</option>
+                                    <option value="finishedOn">Заканчивается на</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editModalZoneRegion">Область</label>
+                            <div class="input-group">
+                                <input class="form-control" id="searchModalZoneRegion">
+                                <select id="searchModalZoneRegion_select" class="custom-select">
+                                    <option value="any">Любое</option>
+                                    <option value="equals">Совпадает</option>
+                                    <option value="contain">Содержит</option>
+                                    <option value="startWith">Начинается с</option>
+                                    <option value="finishedOn">Заканчивается на</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editModalZoneCity">Город</label>
+                            <div class="input-group">
+                                <input class="form-control" id="searchModalZoneCity">
+                                <select id="searchModalZoneCity_select" class="custom-select">
+                                    <option value="any">Любое</option>
+                                    <option value="equals">Совпадает</option>
+                                    <option value="contain">Содержит</option>
+                                    <option value="startWith">Начинается с</option>
+                                    <option value="finishedOn">Заканчивается на</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editModalZoneStreet">Улица</label>
+                            <div class="input-group">
+                                <input class="form-control" id="searchModalZoneStreet">
+                                <select id="searchModalZoneStreet_select" class="custom-select">
+                                    <option value="any">Любое</option>
+                                    <option value="equals">Совпадает</option>
+                                    <option value="contain">Содержит</option>
+                                    <option value="startWith">Начинается с</option>
+                                    <option value="finishedOn">Заканчивается на</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editModalZoneNumber">Номер</label>
+                            <div class="input-group">
+                                <input class="form-control" id="searchModalZoneNumber">
+                                <select id="searchModalZoneNumber_select" class="custom-select">
+                                    <option value="any">Любое</option>
+                                    <option value="equals">Совпадает</option>
+                                    <option value="contain">Содержит</option>
+                                    <option value="startWith">Начинается с</option>
+                                    <option value="finishedOn">Заканчивается на</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" id="searchZone">Поиск</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="editModalZone" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false"
+         data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalZoneTitle">Свойства</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="editModalZoneCountry">Страна</label>
+                            <input class="form-control" id="editModalZoneCountry">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editModalZoneRegion">Область</label>
+                            <input class="form-control" id="editModalZoneRegion">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editModalZoneCity">Город</label>
+                            <input class="form-control" id="editModalZoneCity">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editModalZoneStreet">Улица</label>
+                            <input class="form-control" id="editModalZoneStreet">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="editModalZoneNumber">Номер</label>
+                            <input type="number" class="form-control" id="editModalZoneNumber">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" id="saveZone">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editModalParking" tabindex="-1" role="dialog" aria-hidden="true"
+         data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalParkingTitle">Свойства</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="editModalParkingState">Статус парковочного места</label>
+                            <select class="form-control" id="editModalParkingState">
+                                <option value="true">Свободно</option>
+                                <option value="false">Занято</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" id="saveParking">Сохранить</button>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 
-<div class="modal fade" id="editModalZone" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editModalZoneTitle">Свойства</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group row">
-                        <label for="editModalZoneCountry">Страна</label>
-                        <input class="form-control" id="editModalZoneCountry">
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="editModalZoneRegion">Область</label>
-                        <input class="form-control" id="editModalZoneRegion">
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="editModalZoneCity">Город</label>
-                        <input class="form-control" id="editModalZoneCity">
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="editModalZoneStreet">Улица</label>
-                        <input class="form-control" id="editModalZoneStreet">
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="editModalZoneNumber">Номер</label>
-                        <input type="number" class="form-control" id="editModalZoneNumber">
-                    </div>
-
-                    <div class="form-group row sizeZone">
-                        <label for="editModalZoneXSize">Ширина зоны</label>
-                        <input type="number" class="form-control" id="editModalZoneXSize">
-                    </div>
-
-                    <div class="form-group row sizeZone">
-                        <label for="editModalZoneYSize">Высота зоны</label>
-                        <input type="number" class="form-control" id="editModalZoneYSize">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                <button type="button" class="btn btn-primary" id="saveZone">Сохранить</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="editModalParking" tabindex="-1" role="dialog" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editModalParkingTitle">Свойства</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="editModalParkingState">Статус парковочного места</label>
-                        <select class="form-control" id="editModalParkingState">
-                            <option value="true">Свободно</option>
-                            <option value="false">Занято</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                <button type="button" class="btn btn-primary" id="saveParking">Сохранить</button>
-            </div>
-        </div>
-    </div>
-</div>
+<script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=f249ed01-4180-4088-a075-8fc41aa845d2&lang=ru_RU"
+        type="text/javascript">
+</script>
 
 <script src="/js/jquery-3.3.1.slim.min.js"></script>
 <script src="/js/popper.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
-<script src="/js/jquery.canvasAreaDraw.js"></script>
 <script src="/js/main.js"></script>
+<script type="text/javascript">
+    ymaps.ready(init);
+</script>
+
 </body>
+
 </html>
