@@ -67,6 +67,10 @@ public class PlaceParkingService implements PlaceParkingServiceImpl {
 
     @Override
     public void deletePlace(ParkingPlace place) {
+        if (place.getIsFree()) {
+            place.setIsFree(false);
+            changeAreaPlacecount(place);
+        }
         places.delete(place);
     }
 
