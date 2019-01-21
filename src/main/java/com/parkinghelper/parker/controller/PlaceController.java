@@ -45,11 +45,11 @@ public class PlaceController {
 
     @PutMapping("{id}")
     public ResponseEntity updatePlaceByID(
-            @PathVariable("id") ParkingPlace placeDB,
-            ParkingPlace place
+            @PathVariable("id") ParkingPlace placeFromDB,
+            ParkingPlace placeNew
     ) {
         try {
-            return ResponseEntity.ok(placeService.updatePlace(place, placeDB));
+            return ResponseEntity.ok(placeService.updatePlace(placeNew, placeFromDB));
         }catch (IllegalArgumentException e)
         {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

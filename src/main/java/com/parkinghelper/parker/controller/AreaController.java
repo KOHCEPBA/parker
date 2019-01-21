@@ -44,10 +44,10 @@ public class AreaController {
 
     @PutMapping("{id}")
     public ResponseEntity updateAreaByID(
-            @PathVariable("id") ParkingGeoArea areaDB,
-            ParkingGeoArea area
+            @PathVariable("id") ParkingGeoArea areaFromDB,
+            ParkingGeoArea areaNew
     ) {
-        return ResponseEntity.ok(areaService.updateArea(area, areaDB));
+        return ResponseEntity.ok(areaService.updateArea(areaNew, areaFromDB));
     }
 
     @PutMapping
