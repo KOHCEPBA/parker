@@ -1,4 +1,4 @@
-package com.parkinghelper.parker.service.find;
+package com.parkinghelper.parker.service;
 
 import com.parkinghelper.parker.domain.AreaGeoAddress;
 import com.parkinghelper.parker.domain.ParkingGeoArea;
@@ -11,7 +11,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 @Service
-public class FindParkingService implements FindParkingServiceImpl {
+public class FindParkingService {
 
     private final ParkingPlaceRepository places;
     private final ParkingAreaAddressRepository addresses;
@@ -23,36 +23,34 @@ public class FindParkingService implements FindParkingServiceImpl {
         this.areas = areas;
     }
 
-    @Override
     public Iterable<ParkingPlace> findPlacesNearCoordinate(PGpoint coordinate, Integer limit) {
-        if (limit <= 0) throw new IllegalArgumentException("limit must be greater than zero");
+        if (limit <= 0) {
+            throw new IllegalArgumentException("limit must be greater than zero");
+        }
 
         return places.findPlacesOrderByDistanceLimited(coordinate.x, coordinate.y, limit);
     }
 
-    @Override
     public Iterable<ParkingPlace> findPlacesNearCoordinate(PGpoint coordinate) {
         return places.findPlacesOrderByDistance(coordinate.x, coordinate.y);
     }
 
-    @Override
     public Iterable<ParkingPlace> findFreePlacesByAreaAddress(AreaGeoAddress address) {
         Iterable<AreaGeoAddress> addressesBD = addresses.findAll(Example.of(address));
 
         return places.findAllPlacesByAreaGeoAddressInAndIsFreeTrueOrderById(addressesBD);
     }
 
-    @Override
     public Iterable<ParkingGeoArea> findByAddress(AreaGeoAddress address) {
 
-        if (address.getNumber() == null)
+        if (address.getNumber() == null) {
             return areas.findAreasByAddressFields(
                     address.getCountry(),
                     address.getRegion(),
                     address.getCity(),
                     address.getStreet()
             );
-        else
+        } else {
             return areas.findAreasByAddressFields(
                     address.getCountry(),
                     address.getRegion(),
@@ -60,5 +58,6 @@ public class FindParkingService implements FindParkingServiceImpl {
                     address.getStreet(),
                     address.getNumber()
             );
+        }
     }
 }

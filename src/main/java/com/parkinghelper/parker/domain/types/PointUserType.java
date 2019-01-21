@@ -18,7 +18,6 @@ public class PointUserType implements UserType {
     @Override
     public Object nullSafeGet(ResultSet resultSet, String[] names, SharedSessionContractImplementor sharedSessionContractImplementor, Object owner)
             throws HibernateException, SQLException {
-        assert names.length == 1;
         if (resultSet.wasNull()) {
             return null;
         }

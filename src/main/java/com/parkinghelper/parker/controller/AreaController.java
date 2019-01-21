@@ -3,8 +3,8 @@ package com.parkinghelper.parker.controller;
 import com.parkinghelper.parker.domain.AreaGeoAddress;
 import com.parkinghelper.parker.domain.ParkingGeoArea;
 import com.parkinghelper.parker.domain.requestTypes.FieldProperties;
-import com.parkinghelper.parker.service.area.AreaParkingService;
-import com.parkinghelper.parker.service.find.FindParkingService;
+import com.parkinghelper.parker.service.AreaParkingService;
+import com.parkinghelper.parker.service.FindParkingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -62,8 +62,8 @@ public class AreaController {
         areaService.deleteArea(area);
     }
 
-    @PostMapping("addressTamplate")
-    public ResponseEntity findByAddressTamplate(@RequestBody Iterable<FieldProperties> fieldProperties) {
+    @PostMapping("addressTemplate")
+    public ResponseEntity findByAddressTemplate(@RequestBody Iterable<FieldProperties> fieldProperties) {
         AreaGeoAddress address = new AreaGeoAddress();
         try {
             FieldProperties.copyFields(address, fieldProperties);

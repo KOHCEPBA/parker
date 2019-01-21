@@ -2,8 +2,8 @@ package com.parkinghelper.parker.controller;
 
 import com.parkinghelper.parker.domain.AreaGeoAddress;
 import com.parkinghelper.parker.domain.ParkingPlace;
-import com.parkinghelper.parker.service.find.FindParkingService;
-import com.parkinghelper.parker.service.place.PlaceParkingService;
+import com.parkinghelper.parker.service.FindParkingService;
+import com.parkinghelper.parker.service.PlaceParkingService;
 import org.postgresql.geometric.PGpoint;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

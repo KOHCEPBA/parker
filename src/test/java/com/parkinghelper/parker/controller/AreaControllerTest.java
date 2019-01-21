@@ -3,7 +3,7 @@ package com.parkinghelper.parker.controller;
 import com.google.common.collect.ImmutableList;
 import com.parkinghelper.parker.domain.AreaGeoAddress;
 import com.parkinghelper.parker.domain.ParkingGeoArea;
-import com.parkinghelper.parker.service.area.AreaParkingService;
+import com.parkinghelper.parker.service.AreaParkingService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
