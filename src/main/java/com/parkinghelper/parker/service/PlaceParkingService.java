@@ -28,7 +28,7 @@ public class PlaceParkingService {
     private void changeAreaPlacecount(ParkingPlace place) {
         ParkingGeoArea area = areas.getOne(place.getArea().getId());
         area.setFreeSpaceCount(area.getFreeSpaceCount() + (place.getIsFree() ? 1 : -1));
-        areas.saveAndFlush(area);
+        areas.save(area);
     }
 
     public ParkingPlace updatePlace(ParkingPlace placeNew, ParkingPlace placeOld) {
@@ -47,7 +47,7 @@ public class PlaceParkingService {
             changeAreaPlacecount(placeOld);
         }
 
-        return places.saveAndFlush(placeOld);
+        return places.save(placeOld);
     }
 
     public ParkingPlace updatePlace(ParkingPlace place) {
@@ -68,7 +68,7 @@ public class PlaceParkingService {
             changeAreaPlacecount(place);
         }
 
-        return places.saveAndFlush(place);
+        return places.save(place);
     }
 
     public void deletePlace(ParkingPlace place) {

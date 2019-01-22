@@ -21,7 +21,7 @@ public class AreaParkingService {
     public ParkingGeoArea updateArea(ParkingGeoArea areaNew, ParkingGeoArea areaOld) {
         CopyProperties.copyProperties(areaNew, areaOld, "id", "null"); //Копирование полей из нового в старый
 
-        return areas.saveAndFlush(areaOld);
+        return areas.save(areaOld);
     }
 
     public ParkingGeoArea updateArea(ParkingGeoArea area) {
@@ -37,7 +37,7 @@ public class AreaParkingService {
 
 
     public ParkingGeoArea saveArea(ParkingGeoArea area) {
-        return areas.saveAndFlush(area);
+        return areas.save(area);
     }
 
     public void deleteArea(ParkingGeoArea area) {

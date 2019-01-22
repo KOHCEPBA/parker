@@ -1,10 +1,7 @@
 package com.parkinghelper.parker.repositories;
 
 import com.parkinghelper.parker.domain.AreaGeoAddress;
-import com.parkinghelper.parker.domain.ParkingGeoArea;
 import com.parkinghelper.parker.domain.ParkingPlace;
-import org.postgresql.geometric.PGpoint;
-import org.postgresql.geometric.PGpolygon;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
