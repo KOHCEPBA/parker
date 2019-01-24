@@ -1,6 +1,12 @@
 var deletePoly = false;
 var searchPlaceIndex = 0;
 var searchContainer;
+var selectedPoint;
+
+var freePoint = "islands#blueParkingCircleIcon";
+var notFreePoint = "islands#redParkingCircleIcon";
+var selectedFreePoint = "islands#blueParkingIcon";
+var selectedNotFreePoint = "islands#redParkingIcon";
 
 var map;
 var lastCoords;
@@ -384,7 +390,7 @@ function editParking() {
                 var response = http.responseText;
                 var json = JSON.parse(response);
                 lastPoint.properties.set("selected", false);
-                lastPoint.options.set("preset", json.isFree ? "islands#blueParkingCircleIcon" : "islands#redParkingCircleIcon");
+                lastPoint.options.set("preset", json.isFree ? freePoint : notFreePoint);
                 lastPoint = null;
                 $('#actionsDropdown').hide();
             }
@@ -403,7 +409,7 @@ function deleteZone(poly) {
             if (http.status == 200) {
                 if (lastPoint) {
                     lastPoint.properties.set("selected", false);
-                    lastPoint.options.set("preset", lastPoint.properties.get("isFree") ? "islands#blueParkingCircleIcon" : "islands#redParkingCircleIcon");
+                    lastPoint.options.set("preset", lastPoint.properties.get("isFree") ? freePoint : notFreePoint);
                     lastPoint = null;
                     $('#actionsDropdown').hide();
                 }
@@ -455,6 +461,7 @@ function searchPlaces() {
                         alert('Места не найдены');
                     } else {
                         searchContainer = json;
+                        console.log(searchContainer);
                         selectPoint();
                         $('#prevBtn').show();
                         $('#nextBtn').show();
@@ -467,6 +474,10 @@ function searchPlaces() {
 
 function nextPlace() {
     if (searchPlaceIndex < searchContainer.length){
+        var free = selectedPoint._objects[0].properties.get('isFree');
+        selectedPoint.setOptions({
+            preset: free ? freePoint : notFreePoint
+        });
         searchPlaceIndex++;
         selectPoint();
     }
@@ -474,6 +485,10 @@ function nextPlace() {
 
 function prevPlace() {
     if (searchPlaceIndex > 0){
+        var free = selectedPoint._objects[0].properties.get('isFree');
+        selectedPoint.setOptions({
+            preset: free ? freePoint : notFreePoint
+        });
         searchPlaceIndex--;
         selectPoint();
     }
@@ -486,35 +501,12 @@ function selectPoint() {
         var r2 = r.search('properties.pointID = ' + searchContainer[searchPlaceIndex].id);
         r2.then(function () {
             r2.setOptions({
-                preset: 'islands#blueParkingIcon'
+                preset: selectedFreePoint
             });
-        });
+            selectedPoint = r2;
+         });
     });
     map.setCenter([searchContainer[searchPlaceIndex].coordinate.x, searchContainer[searchPlaceIndex].coordinate.y]);
-}
-
-function searchPlacesByName(name) {
-    var http = new XMLHttpRequest();
-    http.open('POST', '/api/place/area_places/' + name, true);
-    http.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    var body = '';
-    http.send(body);
-    http.onreadystatechange = function () {
-        if (http.readyState == 4) {
-            if (http.status == 200) {
-                var response = http.responseText;
-                var json = JSON.parse(response);
-                if (json.length == 0) {
-                    alert('Места не найдены');
-                } else {
-                    clearFoundPlaces();
-                    $.each(json, function (k, v) {
-                        $('div[park-id=' + v.id + ']').addClass('found');
-                    });
-                }
-            }
-        }
-    };
 }
 
 function clearFoundPlaces() {
@@ -527,8 +519,19 @@ function clearFoundPlaces() {
         var r2 = r.search('properties.pointID != null').search('properties.isFree = true');
         r2.then(function () {
             r2.setOptions({
-                preset: 'islands#blueParkingCircleIcon'
+                preset: freePoint
             });
+        });
+    });
+
+    r = result.search('geometry.type = "Polygon"');
+    r.then(function () {
+        var r2 = r.search('properties.founded = true');
+        r2.then(function () {
+            r2.setOptions({
+                fillColor: '#71afff'
+            });
+            r2.setProperties('founded', false);
         });
     });
 }
@@ -574,7 +577,7 @@ function addPoint(coords, id, idPoint, isFree) {
             selected: false
         }
     }, {
-        preset: isFree ? "islands#blueParkingCircleIcon" : "islands#redParkingCircleIcon",
+        preset: isFree ? freePoint : notFreePoint,
         draggable: false
     });
     map.geoObjects.add(point);
@@ -587,16 +590,16 @@ function addPoint(coords, id, idPoint, isFree) {
             }
             if (lastPoint) {
                 lastPoint.properties.set("selected", false);
-                lastPoint.options.set("preset", lastPoint.properties.get("isFree") ? "islands#blueParkingCircleIcon" : "islands#redParkingCircleIcon");
+                lastPoint.options.set("preset", lastPoint.properties.get("isFree") ? freePoint : notFreePoint);
             }
             lastPoint = c;
             c.properties.set("selected", true);
-            c.options.set("preset", c.properties.get("isFree") ? "islands#blueParkingIcon" : "islands#redParkingIcon");
+            c.options.set("preset", c.properties.get("isFree") ? selectedFreePoint : selectedNotFreePoint);
             $('#actionsDropdown').show();
         } else {
             lastPoint = null;
             c.properties.set("selected", false);
-            c.options.set("preset", c.properties.get("isFree") ? "islands#blueParkingCircleIcon" : "islands#redParkingCircleIcon");
+            c.options.set("preset", c.properties.get("isFree") ? freePoint : notFreePoint);
             $('#actionsDropdown').hide();
         }
     });
