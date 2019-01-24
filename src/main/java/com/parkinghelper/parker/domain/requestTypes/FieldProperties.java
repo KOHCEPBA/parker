@@ -58,8 +58,6 @@ public class FieldProperties {
             try {
                 if (field.getType() == String.class)
                     field.set(target, fieldProp.getValue());
-                if (field.getType() == Integer.class)
-                    field.set(target, Integer.parseInt(fieldProp.getValue()));
             } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }

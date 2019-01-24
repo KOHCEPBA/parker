@@ -29,7 +29,7 @@ public class AreaControllerTest {
         parkingGeoArea.setId(1L);
         AreaGeoAddress areaGeoAddress = new AreaGeoAddress();
         areaGeoAddress.setStreet("testAddr");
-        areaGeoAddress.setNumber(1);
+//        areaGeoAddress.setNumber(1);
         parkingGeoArea.setGeoAddress(areaGeoAddress);
         return parkingGeoArea;
     }

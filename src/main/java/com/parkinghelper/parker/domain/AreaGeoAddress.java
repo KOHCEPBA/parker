@@ -26,5 +26,5 @@ public class AreaGeoAddress {
     private String street;
 
     @JoinColumn(name = "number")
-    private Integer number;
+    private String number;
 }

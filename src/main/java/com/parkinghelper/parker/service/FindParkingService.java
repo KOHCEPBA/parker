@@ -43,14 +43,6 @@ public class FindParkingService {
 
     public Iterable<ParkingGeoArea> findByAddress(AreaGeoAddress address) {
 
-        if (address.getNumber() == null) {
-            return areas.findAreasByAddressFields(
-                    address.getCountry(),
-                    address.getRegion(),
-                    address.getCity(),
-                    address.getStreet()
-            );
-        } else {
             return areas.findAreasByAddressFields(
                     address.getCountry(),
                     address.getRegion(),
@@ -58,6 +50,5 @@ public class FindParkingService {
                     address.getStreet(),
                     address.getNumber()
             );
-        }
     }
 }
